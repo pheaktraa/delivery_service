@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+body {
+  background-color: var(--gray-100);
+  font-family: "Roboto Mono", monospace;
+}
+
+:root {
+
+  /* red */
+  --red-900: #B10000;
+  --red-800: #C01A1A;
+  --red-700: #CF3333;
+  --red-600: #DE4D4D;
+  --red-500: #ED6666;
+  --red-400: #F47F7F;
+  --red-300: #F99797;
+  --red-200: #FDB0B0;
+  --red-100: #FFD8D8;
+
+
+  /* gray */
+  --gray-900: #1F1F1F;
+  --gray-800: #333333;
+  --gray-700: #4D4D4D;
+  --gray-600: #666666;
+  --gray-500: #808080;
+  --gray-400: #999999;
+  --gray-300: #B3B3B3;
+  --gray-200: #CCCCCC;
+  --gray-100: #E6E6E6;
+
+  --text-description: 1.25rem;
+  --text-title: 2rem;
+}
+
+nav {
+  transition: background-color 0.5s ease;
+}
