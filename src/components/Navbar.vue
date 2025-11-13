@@ -18,7 +18,7 @@
         <li
           v-for="(menuloginsignup, index) in loginmenu"
           :key="index"
-          class="font-semibold px-5 py-2 w-[7rem] text-center rounded-[.5rem] [li:nth-child(2)&]:bg-[var(--gray-200)] [li:nth-child(1)&]:bg-[var(--red-800)] [li:nth-child(1)&]:text-white"
+          class="font-semibold px-5 py-2 w-[7rem] text-center rounded-[.5rem] [li:nth-child(2)&]:bg-[var(--gray-300)] [li:nth-child(1)&]:bg-[var(--red-800)] [li:nth-child(1)&]:text-white"
         >
           {{ menuloginsignup.name }}
         </li>
@@ -79,7 +79,7 @@ const changeColor = () => {
   const scrollY = window.scrollY;
   const nav = document.querySelector("nav");
   if (scrollY >= 50) {
-    nav.style.backgroundColor = "var(--gray-300)";
+    nav.style.backgroundColor = "var(--gray-200)";
   } else {
     nav.style.backgroundColor = "var(--gray-100)";
   }
