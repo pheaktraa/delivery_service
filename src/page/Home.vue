@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto">
+  <div class="max-w-[80rem] h-full m-auto mt-[5rem]">
     <div class="flex">
       <div class="py-[12rem] w-full">
         <p
@@ -80,7 +80,7 @@ import { ref, onMounted } from "vue";
 const top = ref(4 * 16); 
 const direction = ref(1); 
 const amplitude = 50; 
-const speed = 0.15; 
+const speed = 0.25; 
 
 const imageStyle = ref({
   top: top.value + "px",

@@ -40,7 +40,57 @@ nav {
   transition: background-color 0.5s ease;
 }
 
+
+.list {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.list::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  /* background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff); */
+  background: var(--red-800);
+  background-size: 200% auto;
+  transition: all .5s;
+  transform: translateX(-100%);
+}
+
+.list:hover::after {
+  transform: translateX(0%);
+  animation: gradient-89 3s linear infinite;
+}
+
+@keyframes gradient-89 {
+  0% {
+    background-position: 100% 0%;
+  }
+
+  50% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.active-link {
+  color: var(--red-800) !important;
+}
+
+.active-link::after {
+  transform: translateX(0) !important;
+}
+
+
+
 /* shadow */
-.sd{
+.sd {
   box-shadow: rgba(0, 0, 0, 0.2) 9.95px 9.95px 1.6px;
 }
