@@ -1,5 +1,5 @@
 <template>
-  <nav class="w-full h-[4.25rem] fixed z-50">
+  <nav class="w-full h-[4.25rem] fixed z-50 top-0">
     <div
       class="max-w-[80rem] h-full m-auto flex items-center justify-between"
     >
@@ -80,8 +80,10 @@ const changeColor = () => {
   const nav = document.querySelector("nav");
   if (scrollY >= 50) {
     nav.style.backgroundColor = "var(--gray-200)";
+    nav.style.boxShadow = "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px"
   } else {
     nav.style.backgroundColor = "var(--gray-100)";
+    nav.style.boxShadow = "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
   }
 };
 
