@@ -39,3 +39,8 @@ body {
 nav {
   transition: background-color 0.5s ease;
 }
+
+/* shadow */
+.sd{
+  box-shadow: rgba(0, 0, 0, 0.2) 9.95px 9.95px 1.6px;
+}
