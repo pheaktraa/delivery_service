@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-black mt-[3rem]">
+  <footer class="bg-black mt-[3rem] relative">
     <div class="max-w-[80rem] m-auto h-[20rem]">
       <div class="h-[15rem] flex justify-between py-[2rem]">
         <div class="h-full flex items-center">
@@ -59,7 +59,11 @@
           </p>
           <div class="flex mt-[1rem]">
             <img src="../assets/img/facebookicon.png" alt="" class="h-[3rem]" />
-            <img src="../assets/img/instagramicon.png" alt="" class="h-[4rem] mt-[-.5rem]  ml-[-1rem]" />
+            <img
+              src="../assets/img/instagramicon.png"
+              alt=""
+              class="h-[4rem] mt-[-.5rem] ml-[-1rem]"
+            />
           </div>
         </div>
       </div>
@@ -68,5 +72,24 @@
         All rights reserved © 2025 deliveryManagement
       </p>
     </div>
+    <div class="max-w-[80rem] m-auto">
+      <div class=" max-w-[80rem] m-auto h-[20rem] w-full fixed top-10/12 left-[95%]">
+        <div
+          class="p-1 bg-white w-[4rem] flex items-center justify-center h-[4rem] rounded-full relative"
+        >
+          <img src="../assets/icon/message.svg" alt="" class="w-[2rem] z-1" />
+          <div
+            class="w-[2rem] h-[2rem] bg-(--red-800) rounded-full absolute z-2 flex items-center justify-center left-[2rem] top-[-1rem]"
+             v-if="show > 1"
+          >
+            <p class="text-white">1</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </footer>
 </template>
+
+<script setup>
+const show = 1;
+</script>

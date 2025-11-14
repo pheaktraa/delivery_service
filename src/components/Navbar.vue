@@ -4,11 +4,11 @@
       class="max-w-[80rem] h-full m-auto flex items-center justify-between"
     >
       <img src="../assets/img/logo.png" alt="" class="h-[7rem] ml-[-1.25rem]" />
-      <ul class="flex gap-9">
+      <ul class="flex gap-9 menu">
         <router-link
           v-for="(menu, index) in listmenu"
           :key="index"
-          class="font-semibold"
+          class="font-semibold hover:text-[var(--red-800)] list py-[.25rem]"
           :to="menu.path"
         >
           {{ menu.name }}
@@ -42,7 +42,7 @@
 const listmenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/home",
   },
   {
     name: "Create Delivery",
