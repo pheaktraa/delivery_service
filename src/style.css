@@ -171,6 +171,11 @@ nav {
   margin: 8px 0;
   width: 100%;
   border-radius: 5px;
+  
+}
+.input:focus {
+  outline: 2px solid var(--gray-200);
+
 }
 
 .container {

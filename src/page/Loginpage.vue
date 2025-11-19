@@ -2,7 +2,7 @@
   <div class="flex items-center h-[100vh] relative">
     <div :class="['container', { 'right-panel-active': isRightPanelActive }]">
       <div class="form-container sign-up-container">
-        <form action="#" class="form">
+        <form action="#" @submit.prevent="handleRegister" class="form relative">
           <h1 class="h1">Create Account</h1>
           <div class="social-container">
             <a href="#" class="social a"><i class="fab fa-facebook-f"></i></a>
@@ -12,11 +12,52 @@
             <a href="#" class="social a"><i class="fab fa-linkedin-in"></i></a>
           </div>
           <span class="span w-full">or use your email for registration</span>
-          <input type="text" placeholder="Firstname" class="input" />
-          <input type="text" placeholder="Lastname" class="input" />
-          <input type="email" placeholder="Email" class="input" />
-          <input type="password" placeholder="Password" class="input" />
-          <button class="button mt-2">Sign Up</button>
+          <input
+            type="text"
+            placeholder="Firstname"
+            class="input text-gray-500"
+            v-model="registerData.firstname"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Lastname"
+            class="input text-gray-500"
+            v-model="registerData.lastname"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            class="input text-gray-500"
+            v-model="registerData.email"
+            required
+          />
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            placeholder="Password"
+            class="input text-gray-500"
+            v-model="registerData.password"
+            required
+          />
+          <button
+            type="button"
+            @click="showPassword = !showPassword"
+            class="absolute bottom-[6.8rem] right-15 text-(--gray-400)"
+          >
+            <component :is="showPassword ? Eye : EyeOff" :size="20" />
+          </button>
+          <button
+            class="button mt-2"
+            :disabled="
+              !registerData.firstname ||
+              !registerData.lastname ||
+              !registerData.email ||
+              !registerData.password
+            "
+          >
+            Sign Up
+          </button>
         </form>
       </div>
 
@@ -34,26 +75,33 @@
           <input
             type="email"
             placeholder="Email"
-            v-model="email"
-            class="input"
+            v-model="logindata.email"
+            class="input text-gray-500"
+            required
           />
 
           <input
             placeholder="Password"
-            class="input"
+            class="input text-gray-500"
             :type="showPassword ? 'text' : 'password'"
-            v-model="password"
+            v-model="logindata.password"
+            required
           />
           <button
             type="button"
             @click="showPassword = !showPassword"
-            class="absolute bottom-[12.7rem] right-20 text-gray-500 hover:text-gray-700"
+            class="absolute bottom-[12.8rem] right-15 text-(--gray-400)"
           >
-            {{ showPassword ? "Hide" : "Show" }}
+            <component :is="showPassword ? Eye : EyeOff" :size="20" />
           </button>
 
           <a href="#" class="span my-3">Forgot your password?</a>
-          <button class="button">Sign In</button>
+          <button
+            class="button"
+            :disabled="!logindata.email || !logindata.password"
+          >
+            Sign In
+          </button>
         </form>
       </div>
 
@@ -89,7 +137,7 @@
         "
       >
         <p v-if="userStore.error">{{ userStore.error }}</p>
-        <p v-else>Succeed</p>
+        <p v-else>{{ userStore.success }}</p>
       </div>
     </transition>
   </div>
@@ -98,30 +146,76 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "../store/userstore";
+import { Eye, EyeOff } from "lucide-vue-next";
 
-const email = ref("");
-const password = ref("");
+const userStore = useUserStore();
+
+const logindata = ref({
+  email: "",
+  password: "",
+});
+const registerData = ref({
+  firstname: "",
+  lastname: "",
+  email: "",
+  password: "",
+  role: "user",
+});
+
 const showPassword = ref(false);
 const showMessage = ref(false);
-const userStore = useUserStore();
 const isRightPanelActive = ref(false);
 
-const activateSignUp = () => {
-  isRightPanelActive.value = true;
-};
+const activateSignUp = () => (isRightPanelActive.value = true);
+const activateSignIn = () => (isRightPanelActive.value = false);
 
-const activateSignIn = () => {
-  isRightPanelActive.value = false;
-};
+// Login
+async function handleLogin() {
+  if (!logindata.value.email || !logindata.value.password) {
+    alert("Please fill all fields");
+    return;
+  }
 
-const handleLogin = async () => {
-  await userStore.login(email.value, password.value);
+  const res = await userStore.login(logindata.value);
+
+  if (res.success) {
+    showMessage.value = true;
+    setTimeout(() => {
+      window.location.href = "/home";
+    }, 1500);
+  }
+}
+
+// Register
+async function handleRegister() {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (
+    !registerData.value.firstname ||
+    !registerData.value.lastname ||
+    !registerData.value.email ||
+    !registerData.value.password
+  ) {
+    showMessage.value = true;
+    userStore.error = "Please fill all fields";
+    setTimeout(() => (showMessage.value = false), 1500);
+    return;
+  }
+
+  if (!emailPattern.test(registerData.value.email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  const res = await userStore.register(registerData.value);
 
   showMessage.value = true;
-  setTimeout(() => {
-    showMessage.value = false;
-  }, 1500);
-};
+  setTimeout(() => (showMessage.value = false), 1500);
+
+  if (res.success) {
+    activateSignIn();
+  }
+}
 </script>
 
 <style>
