@@ -178,6 +178,8 @@ async function handleLogin() {
 
   const res = await userStore.login(logindata.value);
 
+  showMessage.value = true;
+  setTimeout(() => (showMessage.value = false), 1500);
   if (res.success) {
     showMessage.value = true;
     setTimeout(() => {

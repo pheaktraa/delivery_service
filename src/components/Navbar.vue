@@ -12,7 +12,7 @@
           {{ menu.name }}
         </router-link>
       </ul>
-      <ul class="flex gap-6">
+      <ul class="flex gap-6" v-if="showlogin">
         <router-link
           v-for="(menuloginsignup, index) in loginmenu"
           :key="index"
@@ -26,7 +26,7 @@
           </li>
         </router-link>
       </ul>
-      <ul class="flex gap-2 items-center" v-if="showacc > 2">
+      <ul class="flex gap-2 items-center" v-else>
         <li class="font-semibold">Username</li>
         <li>
           <img
@@ -42,6 +42,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { getUserPayload } from '../utils/jwt';
 const listmenu = [
   {
     name: "Home",
@@ -76,7 +78,12 @@ const loginmenu = [
   },
 ];
 
-const showacc = 1;
+const showlogin = ref(true);
+const user = getUserPayload();
+
+if (user && user.role === "user") {
+  showlogin.value = false; // <- use .value instead of reassigning
+}
 
 const changeColor = () => {
   const scrollY = window.scrollY;
