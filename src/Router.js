@@ -1,16 +1,16 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import ContactPage from './page/ContactPage.vue'
 import Home from './page/Home.vue'
 import Landing from './page/Landing.vue'
 import Loginpage from './page/Loginpage.vue'
-import Payment from './page/Payment.vue'
+import ContactPage from './page/ContactPage.vue'
+import AboutPage from './page/AboutPage.vue'
 
 const routes = [
   { path: '/', component: Landing },
   { path: '/home', component: Home },
   { path: '/auth/login', component: Loginpage },
   { path: '/contact', component: ContactPage},
-  { path: '/payment', component: Payment},
+  { path: '/aboutus', component: AboutPage },
 ]
 
 export const router = createRouter({
