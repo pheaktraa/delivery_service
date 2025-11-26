@@ -20,41 +20,6 @@
                     Get Started
                 </button>
             </div>
-            <!-- box right side  -->
-            <!-- <div class="flex flex-1 bg-(--red-700) h-[15rem]">
-                
-                <div class="relative w-full h-full ">
-                    <div class="absolute top-0 left-0 w-[40%] h-[40%] bg-blue-300 rounded-lg">01</div>
-                    <div class="absolute bottom-0 right-0 w-[40%] h-[40%] bg-blue-300 rounded-lg">03</div>
-                    <div class="absolute right-[45%] top-[45%] w-[55%] h-[55%] bg-white rounded-lg">02</div>
-                    <div class="absolute left-[45%] bottom-[45%] w-[55%] h-[55%] bg-white rounded-lg">00</div>
-                    
-                </div>
-            </div> -->
-
-            <!-- Right box container -->
-            <!-- <div class="flex flex-1 items-center justify-center p-4 rounded-xl bg-(--gray-200)">
-                <div class="grid grid-cols-3 grid-rows- gap-4 w-full max-w-[30rem]">
-
-                    <div class="bg-red-700 w-[100%] h-[100px] rounded-xl row-span-1 col-span-1">
-                        <img src="../assets/img/trade.png" class="w-full h-full object-contain object-center p-4">
-                    </div>
-
-                    <div class="bg-red-700 w-[100%] h-[150px] rounded-xl row-span-2 col-span-2">
-                        <img src="https://www.creativehatti.com/wp-content/uploads/2022/07/Punjabi-delivery-boy-is-riding-fast-scooter-for-pizza-delivery-3-small.jpg" 
-                            class="w-full h-full object-cover rounded-xl">
-                    </div>
-                    
-                    <div class="bg-red-700 w-[100%] h-[150px] rounded-xl row-span-2 col-span-2">
-                        <img src="https://www.nicepng.com/png/full/663-6633055_logistics-png.png" class="w-full h-full object-contain p-4">
-                    </div>
-
-                    <div class="bg-red-700 w-[100%] h-[100px] rounded-xl row-span-1 col-span-1">
-                        <img src="../assets/img/trade.png" class="w-full h-full object-contain object-center p-4">
-                    </div>
-
-                </div>
-            </div> -->
 
             <!-- position approch -->
             <div class="flex flex-1 items-center justify-center p-2 rounded-xl">
@@ -216,69 +181,35 @@
                 class="overflow-x-auto overflow-y-hidden flex flex-nowrap gap-5 mt-[2rem] scroll-smooth px-4 h-[15rem] snap-x snap-mandatory">
                 <!-- card -->
                 <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[auto] flex-shrink-0">
+                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[auto] flex-shrink-0" v-for="(rate,index) in ratings" :key="index">
 
                     <!-- icon + username -->
                     <div class="flex gap-3 w-full">
                         <img src="../assets/icon/account_circle.svg" alt="account">
-                        <p class="text-(--red-700) font-bold">Username</p>
+                        <p class="text-(--red-700) font-bold">{{ rate.username }}</p>
                     </div>
                     <!-- body text -->
-                    <p class="pt-[1rem] line-clamp-5">Enjoy a seamless experience from browsing to delivery. We keep
-                        things clear, easy, and welcoming for anyone to use service.</p>
-                </div>
-                <!-- card -->
-                <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[20rem] flex-shrink-0">
-                    <!-- icon + username -->
-                    <div class="flex gap-3 w-full">
-                        <img src="../assets/icon/account_circle.svg" alt="account">
-                        <p class="text-(--red-700) font-bold">Username</p>
-                    </div>
-                    <!-- body text -->
-                    <p class="pt-[1rem] line-clamp-5">Enjoy a seamless experience from browsing to delivery. We keep
-                        things clear, easy, and welcoming for anyone to use service.</p>
-                </div>
-                <!-- card -->
-                <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[20rem] flex-shrink-0">
-                    <!-- icon + username -->
-                    <div class="flex gap-3 w-full">
-                        <img src="../assets/icon/account_circle.svg" alt="account">
-                        <p class="text-(--red-700) font-bold">Username</p>
-                    </div>
-                    <!-- body text -->
-                    <p class="pt-[1rem] line-clamp-5">Enjoy a seamless experience from browsing to delivery. We keep
-                        things clear, easy, and welcoming for anyone to use service.</p>
-                </div>
-                <!-- card -->
-                <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[20rem] flex-shrink-0">
-                    <!-- icon + username -->
-                    <div class="flex gap-3 w-full">
-                        <img src="../assets/icon/account_circle.svg" alt="account">
-                        <p class="text-(--red-700) font-bold">Username</p>
-                    </div>
-                    <!-- body text -->
-                    <p class="pt-[1rem] line-clamp-5">Enjoy a seamless experience from browsing to delivery. We keep
-                        things clear, easy, and welcoming for anyone to use service.</p>
-                </div>
-                <!-- card -->
-                <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[20rem] flex-shrink-0">
-                    <!-- icon + username -->
-                    <div class="flex gap-3 w-full">
-                        <img src="../assets/icon/account_circle.svg" alt="account">
-                        <p class="text-(--red-700) font-bold">Username</p>
-                    </div>
-                    <!-- body text -->
-                    <p class="pt-[1rem] line-clamp-5">Enjoy a seamless experience from browsing to delivery. We keep
-                        things clear, easy, and welcoming for anyone to use service.</p>
+                    <p class="pt-[1rem] line-clamp-5">{{ rate.rating_text }}</p>
                 </div>
 
             </div>
         </div>
     </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import useUserRatingStore from '../store/userRating';
+
+const userRatingStore = useUserRatingStore();
+const ratings = ref([]);
+
+onMounted(async () => {
+  const result = await userRatingStore.fetchRatings();
+  ratings.value = result;
+});
+</script>
+
+
 
 <style></style>
