@@ -107,7 +107,7 @@
               <div class="flex gap-3">
                 <button
                   type="button"
-                  class="payment-btn flex-1 p-3 border-2 rounded-lg border-[var(--gray-300)] hover:bg-[var(--red-800)]  transition-colors duration-300 hover:text-white"
+                  class="payment-btn flex-1 p-3 border-2 rounded-lg border-[var(--gray-300)] hover:bg-[var(--red-800)] transition-colors duration-300 hover:text-white"
                   @click="selectPayment('cash')"
                   :class="
                     selectedPayment === 'cash'
@@ -153,12 +153,14 @@
           </div>
 
           <div class="mt-[3rem]">
-            <button
-              type="submit"
-              class="w-full p-[0.9rem] text-[length:var(--text-description)] text-(--gray-100) font-semibold bg-[var(--red-800)] rounded-lg hover:from-(--red-800) hover:to-(--red-600) transition-all duration-300 hover:scale-102 hover:shadow-lg border-0"
-            >
-              Create Delivery
-            </button>
+            <router-link to="/createdelivery/detail">
+              <button
+                type="button"
+                class="w-full p-[0.9rem] text-[length:var(--text-description)] text-(--gray-100) font-semibold bg-[var(--red-800)] rounded-lg hover:from-(--red-800) hover:to-(--red-600) transition-all duration-300 hover:scale-102 hover:shadow-lg border-0"
+              >
+                Create Delivery
+              </button>
+            </router-link>
           </div>
         </form>
       </div>
