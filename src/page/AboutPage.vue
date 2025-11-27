@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto p-[2rem]">
+  <div class="max-w-[80rem] h-full m-auto p-[2rem] page">
     <div class="flex justify-center py-[3rem]">
       <div class="relative top-0 left-0">
         <img

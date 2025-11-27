@@ -32,8 +32,11 @@ body {
   --gray-200: #CCCCCC;
   --gray-100: #E6E6E6;
 
-  --text-description: 1.225rem;
-  --text-title: 2rem;
+  --text-description: 1.25rem;
+  --text-title: 1.7rem;
+}
+.page{
+  padding:7rem 2.5rem;
 }
 
 nav {
