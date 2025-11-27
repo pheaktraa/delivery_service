@@ -4,6 +4,8 @@ import Landing from './page/Landing.vue'
 import Loginpage from './page/Loginpage.vue'
 import ContactPage from './page/ContactPage.vue'
 import AboutPage from './page/AboutPage.vue'
+import CreateDelivery from './page/CreateDelivery.vue'
+
 
 const routes = [
   { path: '/', component: Landing },
@@ -11,6 +13,7 @@ const routes = [
   { path: '/auth/login', component: Loginpage },
   { path: '/contact', component: ContactPage},
   { path: '/aboutus', component: AboutPage },
+  { path: '/createdelivery', component: CreateDelivery },
 ]
 
 export const router = createRouter({
