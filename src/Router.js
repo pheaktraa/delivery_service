@@ -4,16 +4,27 @@ import Landing from './page/Landing.vue'
 import Loginpage from './page/Loginpage.vue'
 import ContactPage from './page/ContactPage.vue'
 import AboutPage from './page/AboutPage.vue'
-import CreateDelivery from './page/CreateDelivery.vue'
+import CreateDelivery from './page/createdelivery/index.vue'
+import DeliveryDetail from './page/createdelivery/DeliveryDetail.vue'
 
 
 const routes = [
   { path: '/', component: Landing },
   { path: '/home', component: Home },
   { path: '/auth/login', component: Loginpage },
-  { path: '/contact', component: ContactPage},
+  { path: '/contact', component: ContactPage },
   { path: '/aboutus', component: AboutPage },
-  { path: '/createdelivery', component: CreateDelivery },
+  {
+    path: '/createdelivery',
+    component: CreateDelivery,
+    children: [
+      {
+        path: 'detail',
+        component: DeliveryDetail
+      }
+    ]
+  }
+
 ]
 
 export const router = createRouter({
