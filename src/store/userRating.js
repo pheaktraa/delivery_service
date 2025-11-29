@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
-export const useUserRatingStore = defineStore('userRating', {
+const useUserRatingStore = defineStore('userRating', {
   state: () => ({
     ratings: [],
     error: null,
