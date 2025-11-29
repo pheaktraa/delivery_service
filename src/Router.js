@@ -6,6 +6,7 @@ import ContactPage from './page/ContactPage.vue'
 import AboutPage from './page/AboutPage.vue'
 import CreateDelivery from './page/createdelivery/index.vue'
 import DeliveryDetail from './page/createdelivery/DeliveryDetail.vue'
+import SettingPage from './page/admin/SettingPage.vue'
 
 
 const routes = [
@@ -23,7 +24,8 @@ const routes = [
         component: DeliveryDetail
       }
     ]
-  }
+  },
+  { path: '/setting', component: SettingPage },
 
 ]
 
