@@ -33,6 +33,7 @@
               <strong>Type of Item :</strong> {{ getdata?.type_of_items }}
             </li>
             <li><strong>Item Weight :</strong> {{ getdata?.weight }}</li>
+            <li><strong>Item Size :</strong> {{ getdata?.itemsize }}</li>
           </ul>
 
           <p class="mb-[1rem]">Pricing Detail:</p>
@@ -50,7 +51,7 @@
             type="button"
             class="w-full p-[0.9rem] text-[length:var(--text-description)] text-[var(--gray-100)] font-semibold bg-[var(--red-800)] rounded-lg hover:bg-[var(--red-600)] transition-all duration-300 hover:scale-102 hover:shadow-lg border-0"
           >
-            Confirm Order
+            Confirm Delivery
           </button>
 
           <p class="mt-[1rem]">Thank you for using our delivery service!</p>
