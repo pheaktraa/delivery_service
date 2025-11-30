@@ -221,11 +221,16 @@
     </div>
     <transition name="fade">
       <div
-        class="fixed top-2/12 right-1/12 w-[20rem] py-3 px-4 text-center rounded-lg z-2 bg-red"
+        v-if="showMessage"
+        class="fixed top-2/12 right-1/12 w-[20rem] py-3 px-4 text-center rounded-lg z-2"
+        :class="
+          createDeliveryStore.error
+            ? 'bg-red-500 text-white'
+            : 'bg-green-500 text-white'
+        "
       >
-        <p>asf</p>
-        <!-- <p v-if="createDeliveryStore.error">{{ createDeliveryStore.error }}</p>
-        <p v-else>{{ createDeliveryStore.success }}</p> -->
+        <p v-if="createDeliveryStore.error">{{ createDeliveryStore.error }}</p>
+        <p v-else>{{createDeliveryStore.success }}</p>
       </div>
     </transition>
   </div>
@@ -238,6 +243,7 @@ import useCreateDeliveryStore from "../../store/createDelivery";
 
 const router = useRouter();
 const createDeliveryStore = useCreateDeliveryStore();
+const showMessage = ref(false)
 
 const deliveryData = ref({
   pick_up_address: "",
@@ -294,12 +300,15 @@ async function handleCreateDelivery() {
     return;
   }
 
+    showMessage.value = true;
+
+  setTimeout(() => (showMessage.value = false), 2000);
+
   const res = await createDeliveryStore.createDelivery(values);
   if (res.success) {
-     router.push("/createdelivery/detail");
+    router.push("/createdelivery/detail");
   } else {
     alert("Error creating delivery: " + res.message);
   }
 }
 </script>
-
