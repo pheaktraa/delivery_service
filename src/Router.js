@@ -7,6 +7,7 @@ import AboutPage from './page/AboutPage.vue'
 import CreateDelivery from './page/createdelivery/index.vue'
 import DeliveryDetail from './page/createdelivery/DeliveryDetail.vue'
 import SettingPage from './page/admin/SettingPage.vue'
+import ManageUserPage from './page/admin/ManageUserPage.vue'
 
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
     ]
   },
   { path: '/setting', component: SettingPage },
+  { path: '/manageuser', component: ManageUserPage },
 
 ]
 
