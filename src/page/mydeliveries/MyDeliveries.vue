@@ -22,7 +22,7 @@
       </div>
 
       <!-- Order List Items -->
-      <div class="w-full h-full overflow-x-auto mb-[4rem] border border-(--gray-300) rounded-lg">
+      <div class="w-full h-full overflow-x-auto mb-[1rem] border border-(--gray-300) rounded-lg">
         <table class="w-full border-collapse text-fixed">
           <thead class="bg-(--gray-100) border-b border-(--gray-300)">
             <!-- Table Header -->
@@ -33,42 +33,53 @@
               <th class="p-4 text-left text-(--gray-100) font-bold">Date</th>
               <th class="p-4 text-left text-(--gray-100) font-bold">Status</th>
               <th class="p-4 text-left text-(--gray-100) font-bold">Delivery Type</th>
+              <th class="p-4 text-left text-(--gray-100) font-bold"></th>
             </tr>
           </thead>
           <!-- Table Body -->
           <tbody class="divide-y divide-(--gray-200) bg-white">
-            <tr v-for="delivery in filteredDeliveries" :key="delivery.id" class="hover:bg-(--gray-100) transition duration-300">
+            <tr v-for="deliveries in filteredDeliveries" :key="deliveries.id" class="hover:bg-(--gray-100) transition duration-300">
               <!-- Order ID -->
-              <td class="p-4 text-(--gray-800) font-bold">{{ delivery.id }}</td>
+              <td class="p-4 text-(--gray-800) font-bold">{{ deliveries.id }}</td>
 
               <!-- Items -->
               <td class="p-4 text-(--gray-800)">
                 <ul>
-                  <li v-for="item in delivery.items" :key="item.name">
+                  <li v-for="item in deliveries.items" :key="item.name">
                     {{ item.name }} (x{{ item.quantity }})
                   </li>
                 </ul>
               </td>
 
               <!-- Price -->
-              <td class="p-4 text-(--gray-800) font-bold">${{ delivery.total.toFixed(2) }}</td>
+              <td class="p-4 text-(--gray-800) font-bold">${{ deliveries.total.toFixed(2) }}</td>
 
               <!-- Date -->
-              <td class="p-4 text-(--gray-800)">{{ delivery.date }}</td>
+              <td class="p-4 text-(--gray-800)">{{ deliveries.date }}</td>
 
               <!-- Status -->
               <td class="p-4">
                 <span :class="[
                   'px-2 py-1 rounded-full text-sm font-bold border',
-                  delivery.status === 'Delivered' ? 'bg-green-50 text-green-700 border-green-200' :
-                  delivery.status === 'Pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : 'bg-(--gray-100) text-(--gray-600)'
+                  deliveries.status === 'Delivered' ? 'bg-green-50 text-green-700 border-green-200' :
+                  deliveries.status === 'Pending' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : 'bg-(--gray-100) text-(--gray-600)'
                 ]">
-                  {{ delivery.status }}
+                  {{ deliveries.status }}
                 </span>
               </td>
 
               <!-- Delivery Type -->
-              <td class="p-4 text-(--gray-800) font-bold">{{ delivery.delivery_type }}</td>
+              <td class="p-4 text-(--gray-800) font-bold">{{ deliveries.delivery_type }}</td>
+
+              <!-- View Details Button -->
+              <td class="p-4">
+                <button 
+                  @click="viewDetails(deliveries)"
+                  class="px-4 py-2 bg-(--red-800) text-white rounded-lg hover:bg-(--red-700) transition duration-300"
+                >
+                  View
+                </button>
+              </td>
             </tr>
 
             <!-- Empty State (Shows if no deliveries found) -->
@@ -86,50 +97,25 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router';
+import { useDeliveryStore } from '../../store/myDeliveryStore';
 
-// Mock data for deliveries
-const deliveries = [
-  {
-    id: 'D-1001',
-    date: '2024-06-01',
-    status: 'Pending',
-    items: [
-      { name: 'Glock-18', quantity: 2 },
-    ],
-    total: 45.00,
-    delivery_type: 'standard',
-  },
-  {
-    id: 'D-1002',
-    date: '2024-05-28',
-    status: 'Delivered',
-    items: [
-      { name: 'Diamond Sword', quantity: 3 },
-    ],
-    total: 75.50,
-    delivery_type: 'express',
-  },
-  {
-    id: 'D-1003',
-    date: '2024-05-30',
-    status: 'Pending',
-    items: [
-      { name: 'Health Potion', quantity: 5 },
-    ],
-    total: 120.00,
-    delivery_type: 'standard',
-  }
-  // More delivery objects...
-];
+const store = useDeliveryStore();
+const router = useRouter();
 
 const selectedStatus = ref('all');
 
 const filteredDeliveries = computed(() => {
   if (selectedStatus.value === 'all') {
-    return deliveries;
+    return store.deliveries;
   }
-  return deliveries.filter(delivery => 
+  return store.deliveries.filter(delivery => 
   delivery.status.toLowerCase() === selectedStatus.value);
 });
+
+const viewDetails = (delivery) => {
+  store.selectedDelivery = delivery;
+  router.push( '/mydeliveries/details' );
+};
 
 </script>
