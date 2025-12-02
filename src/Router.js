@@ -10,6 +10,8 @@ import SettingPage from './page/admin/SettingPage.vue'
 import ManageUserPage from './page/admin/ManageUserPage.vue'
 import MyDeliveries from './page/mydeliveries/index.vue'
 import MyDeliveriesDetails from './page/mydeliveries/MyDeliveriesDetails.vue'
+import MyDeliveries from './page/MyDeliveries.vue'
+import DashboardPage from './page/admin/DashboardPage.vue'
 
 const routes = [
   { path: '/', component: Landing },
@@ -38,6 +40,8 @@ const routes = [
       }
     ]
   },
+  { path: '/mydeliveries', component: MyDeliveries },
+  { path: '/dashboard', component: DashboardPage },
 
 ]
 
