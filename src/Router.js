@@ -9,7 +9,7 @@ import DeliveryDetail from './page/createdelivery/DeliveryDetail.vue'
 import SettingPage from './page/admin/SettingPage.vue'
 import ManageUserPage from './page/admin/ManageUserPage.vue'
 import MyDeliveries from './page/MyDeliveries.vue'
-
+import DashboardPage from './page/admin/DashboardPage.vue'
 
 const routes = [
   { path: '/', component: Landing },
@@ -30,6 +30,7 @@ const routes = [
   { path: '/setting', component: SettingPage },
   { path: '/manageuser', component: ManageUserPage },
   { path: '/mydeliveries', component: MyDeliveries },
+  { path: '/dashboard', component: DashboardPage },
 
 ]
 
