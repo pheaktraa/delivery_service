@@ -152,9 +152,9 @@
                 v-model="deliveryData.type_of_delivery"
                 class="p-3 rounded-lg border-(--gray-300) border-2 focus:outline-none focus:border-(--red-800) bg-white"
               >
-                <option value="" disabled selected>Select item type</option>
-                <option value="electronics">Car</option>
-                <option value="clothing">Motorcycle</option>
+                <option value="" disabled selected>Select delivery type</option>
+                <option value="Car">Car</option>
+                <option value="Motorcycle">Motorcycle</option>
               </select>
             </div>
             <div class="flex flex-col">
