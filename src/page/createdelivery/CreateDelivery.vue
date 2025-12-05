@@ -285,6 +285,8 @@ function selectitemsize(size) {
 
 async function handleCreateDelivery() {
   const values = deliveryData.value;
+
+  // --- FRONTEND VALIDATION ---
   if (
     !values.pick_up_address ||
     !values.receiver_name ||
@@ -297,18 +299,35 @@ async function handleCreateDelivery() {
     !values.payment_type
   ) {
     createDeliveryStore.error = "Please fill all fields";
+    createDeliveryStore.success = null;
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
     return;
   }
 
+  // clear old messages
+  createDeliveryStore.error = null;
+  createDeliveryStore.success = null;
+
+  // --- API REQUEST ---
+  const res = await createDeliveryStore.createDelivery(values);
+
+  // SUCCESS
+  if (res && res.success) {
+    createDeliveryStore.success = "Delivery created successfully!";
     showMessage.value = true;
 
-  setTimeout(() => (showMessage.value = false), 2000);
-
-  const res = await createDeliveryStore.createDelivery(values);
-  if (res.success) {
-    router.push("/createdelivery/detail");
-  } else {
-    alert("Error creating delivery: " + res.message);
+    setTimeout(() => {
+      showMessage.value = false;
+      router.push("/createdelivery/detail");
+    }, 2000);
+  } 
+  // ERROR
+  else {
+    createDeliveryStore.error = res?.error || "Failed to create delivery";
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
   }
 }
+
 </script>
