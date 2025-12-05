@@ -32,6 +32,9 @@
             <li>
               <strong>Type of Item :</strong> {{ getdata?.type_of_items }}
             </li>
+            <li>
+              <strong>Type of Delivery :</strong> {{ getdata?.type_of_delivery }}
+            </li>
             <li><strong>Item Weight :</strong> {{ getdata?.weight }}</li>
             <li><strong>Item Size :</strong> {{ getdata?.itemsize }}</li>
           </ul>
