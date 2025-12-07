@@ -29,7 +29,7 @@
                   {{ item.name }} (x{{ item.quantity }})
                 </p>
                 <p><strong>ID:</strong> {{ item.id }}</p>
-                <p><strong>Date:</strong> {{ item.date }}</p>
+                <p><strong>Date:</strong> {{ item.date.split('T')[0] }}</p>
                 <p>
                   <strong>Status: </strong>
                   <span :class="[
@@ -53,23 +53,23 @@
 
             <!-- Section 2 -->
             <div class="flex flex-col gap-2 border-b-[2px] border-(--gray-300) pb-2">
-              <p><strong>Size:</strong> {{ item.size }}</p>
+              <p><strong>Size:</strong> {{ item.itemsize }}</p>
               <p><strong>Weight:</strong> {{ item.weight }}Kg</p>
-              <p><strong>Item type:</strong> {{ item.items_type }}</p>
+              <p><strong>Item type:</strong> {{ item.type_of_items }}</p>
             </div>
 
             <!-- Section 3 -->
             <div class="flex flex-col gap-2 border-b-[2px] border-(--gray-300) pb-2">
-              <p><strong>Price:</strong> ${{ item.total }}</p>
-              <p><strong>Pickup Address:</strong> {{ item.pickup_location }}</p>
-              <p><strong>Destination Address:</strong> {{ item.dropoff_location }}</p>
+              <p><strong>Price:</strong> ${{ item.total_amount }}</p>
+              <p><strong>Pickup Address:</strong> {{ item.pick_up_address }}</p>
+              <p><strong>Destination Address:</strong> {{ item.destination_address }}</p>
             </div>
 
             <!-- Section 4 -->
             <div class="flex flex-col gap-2">
-              <p><strong>Delivery Type:</strong> {{ item.delivery_type }}</p>
-              <p><strong>Recipient:</strong> {{ item.recipient_name }}</p>
-              <p><strong>Recipient Contact:</strong> {{ item.recipient_contact }}</p>
+              <p><strong>Delivery Type:</strong> {{ item.type_of_delivery }}</p>
+              <p><strong>Recipient:</strong> {{ item.receiver_name }}</p>
+              <p><strong>Recipient Contact:</strong> {{ item.receiver_contact }}</p>
             </div>
           </div>
         </div>

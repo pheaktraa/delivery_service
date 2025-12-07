@@ -134,7 +134,7 @@
           <div class="grid md:grid-cols-2 gap-6">
             <div class="flex flex-col">
               <label for="itemWeight" class="font-semibold mb-2"
-                >Item Weight</label
+                >Item Weight: Kg</label
               >
               <input
                 type="text"
@@ -266,7 +266,7 @@ const sizeMultiplier = { S: 1, M: 1.5, L: 2 };
 const priceitemweight = computed(() => {
   const weight = Number(deliveryData.value.weight);
   const multiplier = sizeMultiplier[deliveryData.value.itemsize] || 1;
-  return weight * 2000 * multiplier;
+  return weight * 0.50 * multiplier;
 });
 
 watch(priceitemweight, (newVal) => {

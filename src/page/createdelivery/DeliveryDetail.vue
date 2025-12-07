@@ -35,7 +35,7 @@
             <li>
               <strong>Type of Delivery :</strong> {{ getdata?.type_of_delivery }}
             </li>
-            <li><strong>Item Weight :</strong> {{ getdata?.weight }}</li>
+            <li><strong>Item Weight :</strong> {{ getdata?.weight }} Kg</li>
             <li><strong>Item Size :</strong> {{ getdata?.itemsize }}</li>
           </ul>
 
@@ -43,9 +43,9 @@
           <ul class="mb-[1rem]">
             <div class="border-t-3 w-[14.5rem] my-[1rem]"></div>
             <li>
-              <strong>Subtotal :</strong> {{ getdata?.total_amount }} riel
+              <strong>Subtotal :</strong> {{ getdata?.total_amount }} $
             </li>
-            <li><strong>Total :</strong> {{ getdata?.total_amount }} riel</li>
+            <li><strong>Total :</strong> {{ getdata?.total_amount }} $</li>
             <div class="border-t-3 w-[14.5rem] my-[1rem]"></div>
             <li><strong>Payment :</strong> {{ getdata?.payment_type }}</li>
           </ul>
