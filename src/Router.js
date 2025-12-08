@@ -11,6 +11,7 @@ import ManageUserPage from './page/admin/ManageUserPage.vue'
 import MyDeliveries from './page/mydeliveries/index.vue'
 import MyDeliveriesDetails from './page/mydeliveries/MyDeliveriesDetails.vue'
 import DashboardPage from './page/admin/DashboardPage.vue'
+import OrderManagementPage from './page/admin/OrderManagementPage.vue'
 
 const routes = [
   { path: '/', component: Landing },
@@ -40,7 +41,7 @@ const routes = [
     ]
   },
   { path: '/dashboard', component: DashboardPage },
-
+  { path: '/manageorders', component: OrderManagementPage}
 ]
 
 export const router = createRouter({
