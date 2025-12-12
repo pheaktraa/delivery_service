@@ -12,6 +12,7 @@ import MyDeliveries from './page/mydeliveries/index.vue'
 import MyDeliveriesDetails from './page/mydeliveries/MyDeliveriesDetails.vue'
 import DashboardPage from './page/admin/DashboardPage.vue'
 import OrderManagementPage from './page/admin/OrderManagementPage.vue'
+import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 
 const routes = [
   { path: '/', component: Landing },
@@ -41,7 +42,10 @@ const routes = [
     ]
   },
   { path: '/dashboard', component: DashboardPage },
-  { path: '/manageorders', component: OrderManagementPage}
+  { path: '/manageorders', component: OrderManagementPage },
+  
+  // transporter
+  { paht: '/acceptdelivery', component: Acceptdeliver }
 ]
 
 export const router = createRouter({
