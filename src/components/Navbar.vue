@@ -2,9 +2,19 @@
   <nav class="w-full h-[4.25rem] fixed z-50 top-0">
     <div class="max-w-[80rem] h-full m-auto flex items-center justify-between">
       <img src="../assets/img/logo.png" alt="" class="h-[7rem] ml-[-1.25rem]" />
-      <ul class="flex gap-9 menu">
+      <ul class="flex gap-9 menu"  v-if="user?.role === 'user'">
         <router-link
           v-for="(menu, index) in listmenu"
+          :key="index"
+          class="font-semibold hover:text-[var(--red-800)] list py-[.25rem]"
+          :to="menu.path"
+        >
+          {{ menu.name }}
+        </router-link>
+      </ul>
+      <ul class="flex gap-9 menu"  v-if="user?.role === 'transporter'">
+        <router-link
+          v-for="(menu, index) in listmenudelivery"
           :key="index"
           class="font-semibold hover:text-[var(--red-800)] list py-[.25rem]"
           :to="menu.path"
@@ -68,6 +78,21 @@ const listmenu = [
   },
 ];
 
+const listmenudelivery = [
+  {
+    name: "Accept Delivery",
+    path: "/acceptdelivery",
+  },
+  {
+    name: "About Us",
+    path: "/aboutus",
+  },
+  {
+    name: "Contact",
+    path: "/contact",
+  },
+];
+
 const loginmenu = [
   {
     name: "LOGIN",
@@ -87,6 +112,10 @@ if (user && user.role === "user") {
   console.log(user.role);
   console.log(user.username);
   
+} else {
+  showacc.value = true;
+  console.log(user.role);
+  console.log(user.username);
 }
 
 const changeColor = () => {

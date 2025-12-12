@@ -56,7 +56,46 @@ export const useUserStore = defineStore('user', {
           message,
         };
       }
-    }
+    },
+
+    async loginTransporter(data) {
+      try {
+        const res = await axios.post(`${API_URL}/transporter/logintransporter`, data);
+
+        this.user = res.data.transporter;
+        this.token = res.data.token;
+        localStorage.setItem("transporter_token", res.data.token);
+
+        this.error = null;
+        this.success = res.data.message || "Transporter login successful";
+
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message =
+          err.response?.data?.message || "Transporter login failed";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+
+    async registerTransporter(data) {
+      try {
+        const res = await axios.post(
+          `${API_URL}/transporter/registertransporter`,
+          data
+        );
+
+        this.success = res.data.message || "Transporter registered";
+        this.error = null;
+
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message =
+          err.response?.data?.message || "Transporter register failed";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
 
   }
 })

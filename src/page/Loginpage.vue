@@ -153,6 +153,7 @@ const userStore = useUserStore();
 const logindata = ref({
   email: "",
   password: "",
+  role: ""
 });
 const registerData = ref({
   firstname: "",
@@ -175,15 +176,23 @@ async function handleLogin() {
     alert("Please fill all fields");
     return;
   }
+  let res;
 
-  const res = await userStore.login(logindata.value);
+   if (logindata.value.role === "transporter") {
+    res = await userStore.loginTransporter(logindata.value);
+  } else {
+    res = await userStore.login(logindata.value);
+   }
+  
   showMessage.value = true;
   setTimeout(() => (showMessage.value = false), 1500);
 
   if (res.success) {
     showMessage.value = true;
     setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = logindata.value.role === "transporter"
+          ? "/acceptdelivery"
+          : "/home";
     }, 1500);
   }
 }
