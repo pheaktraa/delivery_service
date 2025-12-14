@@ -62,6 +62,11 @@
                 <!-- DRIVER SPECIFIC FIELDS (Only if role === driver) -->
                 <div v-if="formData.role === 'driver'" class="col-span-2">
                     <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">
+                            Assign Password
+                        </label>
+                        <input v-model="formData.password" type="text" placeholder="e.g. MoveSmart123"
+                            class="w-full p-3 rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-800 font-mono">
                         <label class="block font-bold text-(--gray-800) uppercase mb-[1rem]">Vehicle Type</label>
                         <select v-model="formData.vehicleType" :disabled="!isEditing"
                             :class="['w-full p-3 rounded-lg border transition', isEditing ? 'bg-(--gray-100) border-none focus:outline-2 focus:-outline-offset-2' : 'bg-(--gray-100) border-(--gray-700) text-(--gray-700)']">
@@ -111,10 +116,11 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-// 1. PROPS & EMITS
+// 1. Receiving Orders (Props) & EMITS
 const props = defineProps({
-    isOpen: Boolean,
-    user: Object // The user object passed from Parent
+    isOpen: Boolean, // Should I be visible?
+    user: Object, // Who am I showing? The user object passed from Parent
+    isCreating: Boolean // Am I making a new person? NEW PROP
 })
 
 const emit = defineEmits(['close', 'save'])
@@ -123,14 +129,21 @@ const emit = defineEmits(['close', 'save'])
 const isEditing = ref(false)
 const formData = ref({}) // We edit this copy, not the prop directly
 
-// 3. WATCHER
-// Whenever the 'user' prop changes (e.g., Admin clicks a different row),
-// we update our local 'formData' copy.
-watch(() => props.user, (newUser) => {
-    if (newUser) {
-        formData.value = { ...newUser } // Create a copy
+// 3. WATCHER Setup
+watch(() => props.isOpen, (isOpen) => {
+    if (isOpen) {
+        // 1. DECIDE MODE: 
+        // If creating new user -> Start in Edit Mode (True)
+        // If viewing existing -> Start in Read-Only Mode (False)
+        isEditing.value = props.isCreating ? true : false
+
+        // 2. PHOTOCOPY DATA:
+        // We create a COPY ({...props.user}) named 'formData'.
+        // Why? If we edited 'props.user' directly, the table behind 
+        // the modal would change while you type. That looks buggy.
+        formData.value = { ...props.user }
     }
-}, { immediate: true })
+})
 
 // 4. ACTIONS
 const handleSave = () => {

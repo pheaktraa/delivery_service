@@ -24,13 +24,22 @@
       >
         Drivers
       </button>
+
+      <!-- Only show if we are on Drivers tab -->
+      <button 
+        v-if="activeTab === 'Drivers'"
+        @click="openCreateModal"
+        class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-900"
+      >
+        + Add New Driver
+      </button>
     </div>
 
     <!-- REUSABLE TABLE COMPONENT -->
     <!-- We pass the filtered list into the table -->
     <ShareUserTable 
-      :users="filteredList"
-      @view="openModal" 
+      :users="filteredList" 
+      @view="openEditModal" 
       @edit=""
       @ban="banUser"
     />
@@ -40,8 +49,9 @@
     <ShareUserProfileModal 
       :isOpen="showModal" 
       :user="selectedUser" 
+      :isCreating="isCreating"
       @close="showModal = false"
-      @save="updateUser"
+      @save="handleSave"
     />
 
   </div>
@@ -53,7 +63,7 @@ import { ref, reactive, computed } from 'vue'
 import ShareUserProfileModal from '../../components/ShareUserProfileModal.vue'
 import ShareUserTable from '../../components/ShareUserTable.vue'
 
-// 1. MOCK DATA (Simulating Backend)
+// MOCK DATA (Simulating Backend)
 // We use 'reactive' so if we change data, the table updates automatically.
 const allUsers = reactive([
   // CUSTOMERS
@@ -102,12 +112,40 @@ const allUsers = reactive([
 ])
 
 
-// 2. PAGE STATE
-const activeTab = ref('Customers') // Controls which tab is open
-const showModal = ref(false)       // Controls if pop-up is visible
-const selectedUser = ref(null)     // Stores the user clicked by Admin
+// PAGE STATE
+const activeTab = ref('Customers') // Controls which tab is open (clicked)
+const showModal = ref(false)       // True = Show Pop-up, False = Hide Pop-up
+const selectedUser = ref(null)     // Stores the specific user we are looking at clicked by Admin
+const isCreating = ref(false)      // True = We are adding a NEW person. False = We are editing an OLD person.
 
-// 3. COMPUTED PROPERTIES (Filter Logic)
+// OPEN FOR EDITING (existing user)
+const openEditModal = (user) => {
+  // Put the user data into our variable
+  selectedUser.value = user //  Load the clicked user's data
+  isCreating.value = false // We are NOT creating
+  showModal.value = true // Open the box
+}
+
+// OPEN FOR CREATING (New Logic)
+const openCreateModal = () => {
+  // We create a "Mock Empty Database Row" here
+  selectedUser.value = {
+    id: 'D-NEW', // Temporary ID
+    role: 'driver', // Force role to driver
+    status: 'Active',
+    name: '',
+    phone: '',
+    email: '',
+    vehicleType: 'motorbike', // Default
+    plateNumber: '',
+    address: ''
+  }
+  
+  isCreating.value = true // We ARE creating (Flag is TRUE)
+  showModal.value = true // Open the box
+}
+
+// COMPUTED PROPERTIES (Filter Logic)
 // This automatically updates the list based on the active tab
 const filteredList = computed(() => {
   if (activeTab.value === 'Customers') {
@@ -117,26 +155,44 @@ const filteredList = computed(() => {
   }
 })
 
-// 4. ACTION HANDLERS
-// Open Modal when "View" is clicked
-const openModal = (user) => {
-  selectedUser.value = user // Pass this data to the modal prop
-  showModal.value = true
-}
-
-// Handle "Save" event from the Modal
-const updateUser = (updatedData) => {
-  console.log("Saving user:", updatedData)
-  
-  // Find the user in our mock list and update them
-  const index = allUsers.findIndex(u => u.id === updatedData.id)
-  if (index !== -1) {
-    allUsers[index] = updatedData // This updates the Table instantly!
+// THE SMART SAVE FUNCTION
+const handleSave = (userData) => {
+  if (isCreating.value) {
+    // === LOGIC FOR ADDING ===
+    console.log("Creating new user:", userData)
+    
+    // Generate a fake random ID for the frontend demo
+    userData.id = 'D-' + Math.floor(Math.random() * 1000)
+    
+    // Push to the array (Simulates saving to DB)
+    allUsers.push(userData)
+    
+  } else {
+    // === LOGIC FOR EDITING (EDITING EXISTING) ===
+    console.log("Updating existing user:", userData)
+    // Find where this user is in the array
+    const index = allUsers.findIndex(u => u.id === userData.id)
+    // Overwrite the old data with new data
+    if (index !== -1) allUsers[index] = userData
   }
   
   showModal.value = false // Close modal
-  alert("User Profile Updated Successfully!")
+  alert("Success!")
 }
+
+// Handle "Save" event from the Modal
+// const updateUser = (updatedData) => {
+//   console.log("Saving user:", updatedData)
+  
+  // Find the user in our mock list and update them
+//   const index = allUsers.findIndex(u => u.id === updatedData.id)
+//   if (index !== -1) {
+//     allUsers[index] = updatedData // This updates the Table instantly!
+//   }
+  
+//   showModal.value = false // Close modal
+//   alert("User Profile Updated Successfully!")
+// }
 
 // Handle "Ban" event
 const banUser = (user) => {
