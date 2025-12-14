@@ -19,6 +19,7 @@
             <option value="all">All</option>
             <option value="pending">Pending</option>
             <option value="delivered">Delivered</option>
+            <option value="accepted">Accepted</option>
           </select>
         </label>
       </div>
@@ -83,9 +84,10 @@
               <!-- Edit -->
               <td class="p-4">
                 <button
+                  @click="viewDetails(delivery)"
                   class="px-4 py-2 bg-(--red-800) text-white rounded-lg hover:bg-(--red-700) transition duration-300"
                 >
-                  Edit
+                  View
                 </button>
               </td>
             </tr>
@@ -106,11 +108,11 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useDeliveryStore } from "../../store/myDeliveryStore";
-import useCreateDeliveryStore from "../../store/createDelivery";
+import { useDeliveryStore } from "../../../store/myDeliveryStore";
+import useCreateDeliveryStore from "../../../store/createDelivery";
 
-// const store = useDeliveryStore();
-// const router = useRouter();
+const store = useDeliveryStore();
+const router = useRouter();
 const storedelivery = useCreateDeliveryStore();
 const getdata = ref([])
 
@@ -128,5 +130,10 @@ const filteredDeliveries = computed(() => {
     item.status.toLowerCase() === selectedStatus.value
   );
 });
+
+const viewDetails = (delivery) => {
+  store.selectedDelivery = delivery;
+  router.push('/manageorders/details');
+};
 
 </script>

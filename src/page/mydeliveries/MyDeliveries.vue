@@ -24,6 +24,7 @@
             <option value="all">All</option>
             <option value="pending">Pending</option>
             <option value="delivered">Delivered</option>
+            <option value="accepted">Accepted</option>
           </select>
         </label>
       </div>
