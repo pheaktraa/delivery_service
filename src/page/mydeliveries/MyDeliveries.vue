@@ -128,6 +128,7 @@ const getdata = ref([])
 onMounted(async () => {
   const result = await storedelivery.getdeliverybyuser();
   getdata.value = result;
+  
 })
 
 const selectedStatus = ref('all');
