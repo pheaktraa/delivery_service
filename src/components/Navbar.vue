@@ -84,6 +84,10 @@ const listmenudelivery = [
     path: "/acceptdelivery",
   },
   {
+    name: "Delivery",
+    path: "/delivery",
+  },
+  {
     name: "About Us",
     path: "/aboutus",
   },

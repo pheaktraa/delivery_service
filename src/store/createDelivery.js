@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const useCreateDeliveryStore = defineStore('createDelivery', {
   state: () => ({
@@ -57,6 +57,16 @@ const useCreateDeliveryStore = defineStore('createDelivery', {
 
       } catch (err) {
         const message = err.response?.data?.message || "Failed to fetch deliveries";
+        this.error = message;
+        return [];
+      }
+    },
+    async getalldelivery() {
+      try {
+        const res = await axios.get(`${API_URL}/getalldelivery`)
+        return res.data
+      } catch (err) {
+        const message = err.response?.data?.message;
         this.error = message;
         return [];
       }
