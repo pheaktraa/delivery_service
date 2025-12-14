@@ -23,7 +23,7 @@
         </router-link>
       </ul>
       <ul class="flex gap-2 items-center" v-if="showacc">
-        <li class="font-semibold">{{ user.username }}</li>
+        <li class="font-semibold">{{ user?.username }}</li>
         <li>
           <img
             src="../assets/icon/account_circle.svg"
@@ -108,19 +108,21 @@ const loginmenu = [
   },
 ];
 
+const user = ref(null);
 const showacc = ref(false);
-const user = getUserPayload();
 
-if (user && user.role === "user") {
+// get user payload
+user.value = getUserPayload();
+
+// show account if logged in
+if (user.value && user.value.role === 'user') {
   showacc.value = true;
-  console.log(user.role);
-  console.log(user.username);
-  
+  console.log(user.value.role);
+  console.log(user.value.username);
 } else {
-  showacc.value = true;
-  console.log(user.role);
-  console.log(user.username);
+  showacc.value = false;
 }
+
 
 const changeColor = () => {
   const scrollY = window.scrollY;
