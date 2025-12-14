@@ -11,7 +11,8 @@ import ManageUserPage from './page/admin/ManageUserPage.vue'
 import MyDeliveries from './page/mydeliveries/index.vue'
 import MyDeliveriesDetails from './page/mydeliveries/MyDeliveriesDetails.vue'
 import DashboardPage from './page/admin/DashboardPage.vue'
-import OrderManagementPage from './page/admin/OrderManagementPage.vue'
+import OrderManagementPage from './page/admin/manageorders/index.vue'
+import OrderManagementDetailsPage from './page/admin/manageorders/OrderManagementDetailsPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
 
@@ -43,7 +44,15 @@ const routes = [
     ]
   },
   { path: '/dashboard', component: DashboardPage },
-  { path: '/manageorders', component: OrderManagementPage },
+  { path: '/manageorders',
+    component: OrderManagementPage, 
+    children: [
+      {
+        path: 'details',
+        component: OrderManagementDetailsPage
+      }
+    ]
+  },
   
   // transporter
   { path: '/acceptdelivery', component: Acceptdeliver },
