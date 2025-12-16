@@ -1,12 +1,13 @@
 <template>
-  <div class="p-8 max-w-5xl mx-auto mt-[5rem] bg-(--gray-100)">
+  <div class="max-w-[80rem] h-full m-auto page">
+    <div class="mt-[2rem] bg-(--gray-100) p-[2rem] rounded-lg sd">
     
     <!-- PAGE TITLE -->
-    <div class="flex justify-between items-center">
-      <div>
-        <p class="text-[2rem] font-bold text-(--gray-800)">Users Management</p>
+    <div class="border-b-[2px] border-(--gray-300) pt-[2rem] pb-[2rem]">
+        <p class="text-(--red-800) text-[length:var(--text-title)] font-bold">
+          User Management
+        </p>
       </div>
-    </div>
 
     <!-- TABS CONTROLLER -->
     <div class="flex gap-2 bg-(--gray-700) p-1.5 rounded-xl w-fit mt-[2rem]">
@@ -53,7 +54,7 @@
       @close="showModal = false"
       @save="handleSave"
     />
-
+    </div>
   </div>
 </template>
 
