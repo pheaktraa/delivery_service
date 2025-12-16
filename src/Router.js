@@ -15,6 +15,7 @@ import OrderManagementPage from './page/admin/manageorders/index.vue'
 import OrderManagementDetailsPage from './page/admin/manageorders/OrderManagementDetailsPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
+import ProfilePage from './page/ProfilePage.vue'
 
 const routes = [
   { path: '/', component: Landing },
@@ -22,6 +23,7 @@ const routes = [
   { path: '/auth/login', component: Loginpage },
   { path: '/contact', component: ContactPage },
   { path: '/aboutus', component: AboutPage },
+  { path: '/profile', component: ProfilePage},
   {
     path: '/createdelivery',
     component: CreateDelivery,
