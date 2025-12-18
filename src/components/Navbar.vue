@@ -118,8 +118,15 @@ user.value = getUserPayload();
 if (user.value && user.value.role === 'user') {
   showacc.value = true;
   console.log(user.value.role);
+  console.log(user.value.id);
   console.log(user.value.username);
-} else {
+} else if (user.value && user.value.role === 'transporter') {
+  showacc.value = true;
+  console.log(user.value.role);
+  console.log(parseInt(user.value.id));
+  console.log(user.value.username);
+}
+else {
   showacc.value = false;
 }
 

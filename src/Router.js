@@ -14,6 +14,8 @@ import DashboardPage from './page/admin/DashboardPage.vue'
 import OrderManagementPage from './page/admin/OrderManagementPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
+import Index from './page/chat/index.vue'
+
 
 const routes = [
   { path: '/', component: Landing },
@@ -47,7 +49,9 @@ const routes = [
   
   // transporter
   { path: '/acceptdelivery', component: Acceptdeliver },
-  { path: '/delivery', component: Delivery }
+  { path: '/delivery', component: Delivery },
+
+  { path: '/chat', name:'Chat', component: Index }
 ]
 
 export const router = createRouter({

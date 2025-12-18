@@ -1,5 +1,8 @@
 <template>
-  <footer class="bg-black mt-[3rem] relative">
+  <footer
+    class="bg-black relative"
+    :class="['bg-black relative', route.path !== '/chat' ? 'mt-[3rem]' : '']"
+  >
     <div class="max-w-[80rem] m-auto h-[20rem]">
       <div class="h-[15rem] flex justify-between py-[2rem]">
         <div class="h-full flex items-center">
@@ -72,24 +75,35 @@
         All rights reserved © 2025 deliveryManagement
       </p>
     </div>
-    <div class="max-w-[80rem] m-auto">
-      <div class=" max-w-[80rem] m-auto h-[20rem] w-full fixed top-10/12 left-[95%]">
+    <router-link to="/chat">
+      <div class="max-w-[80rem] m-auto">
         <div
-          class="p-1 bg-white w-[4rem] flex items-center justify-center h-[4rem] rounded-full relative"
+          class="max-w-[80rem] m-auto h-[20rem] w-full fixed top-10/12 left-[95%]"
         >
-          <img src="../assets/icon/message.svg" alt="" class="w-[2rem] z-1" />
           <div
-            class="w-[2rem] h-[2rem] bg-(--red-800) rounded-full absolute z-2 flex items-center justify-center left-[2rem] top-[-1rem]"
-             v-if="show > 1"
+            class="p-1 bg-(--red-800) w-[3rem] flex items-center justify-center h-[3rem] rounded-full relative"
           >
-            <p class="text-white">1</p>
+            <img
+              src="../assets/icon/chaticon.svg"
+              alt=""
+              class="w-[1.5rem] z-1"
+            />
+            <div
+              class="w-[2rem] h-[2rem] bg-(--red-800) rounded-full absolute z-2 flex items-center justify-center left-[2rem] top-[-1rem]"
+              v-if="show > 1"
+            >
+              <p class="text-white">1</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </router-link>
   </footer>
 </template>
 
 <script setup>
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 const show = 1;
 </script>
