@@ -15,8 +15,10 @@ import OrderManagementPage from './page/admin/manageorders/index.vue'
 import OrderManagementDetailsPage from './page/admin/manageorders/OrderManagementDetailsPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
+
 import ProfilePage from './page/ProfilePage.vue'
 import driverDashboard from './page/transporter/driverDashboard.vue'
+
 
 const routes = [
   { path: '/', component: Landing },
@@ -61,6 +63,7 @@ const routes = [
   { path: '/acceptdelivery', component: Acceptdeliver },
   { path: '/delivery', component: Delivery },
   { path: '/driverDashboard', component: driverDashboard },
+
 ]
 
 export const router = createRouter({
