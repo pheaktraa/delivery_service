@@ -23,15 +23,16 @@
         </router-link>
       </ul>
       <ul class="flex gap-2 items-center" v-if="showacc">
-        <li class="font-semibold">{{ user?.username }}</li>
         <li>
-          <img
-            src="../assets/icon/account_circle.svg"
-            alt=""
-            class="w-[2rem]"
-          />
+          <router-link to="/profile" class="flex items-center gap-2">
+            <span class="font-semibold">{{ user?.username }}</span>
+            <img
+              src="../assets/icon/account_circle.svg"
+              alt=""
+              class="w-[2rem]"
+            />
+          </router-link>
         </li>
-        <li></li>
       </ul>
       <ul class="flex gap-6" v-else>
         <router-link

@@ -60,7 +60,7 @@
                 </div>
 
                 <!-- DRIVER SPECIFIC FIELDS (Only if role === driver) -->
-                <div v-if="formData.role === 'driver'" class="col-span-2">
+                <!-- <div v-if="formData.role === 'driver'" class="col-span-2">
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1">
                             Assign Password
@@ -75,7 +75,7 @@
                             <option value="car">Car</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Address -->
                 <div class="col-span-2">

@@ -11,10 +11,13 @@ import ManageUserPage from './page/admin/ManageUserPage.vue'
 import MyDeliveries from './page/mydeliveries/index.vue'
 import MyDeliveriesDetails from './page/mydeliveries/MyDeliveriesDetails.vue'
 import DashboardPage from './page/admin/DashboardPage.vue'
-import OrderManagementPage from './page/admin/OrderManagementPage.vue'
+import OrderManagementPage from './page/admin/manageorders/index.vue'
+import OrderManagementDetailsPage from './page/admin/manageorders/OrderManagementDetailsPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
-import Index from './page/chat/index.vue'
+
+import ProfilePage from './page/ProfilePage.vue'
+import driverDashboard from './page/transporter/driverDashboard.vue'
 
 
 const routes = [
@@ -23,6 +26,7 @@ const routes = [
   { path: '/auth/login', component: Loginpage },
   { path: '/contact', component: ContactPage },
   { path: '/aboutus', component: AboutPage },
+  { path: '/profile', component: ProfilePage},
   {
     path: '/createdelivery',
     component: CreateDelivery,
@@ -45,13 +49,21 @@ const routes = [
     ]
   },
   { path: '/dashboard', component: DashboardPage },
-  { path: '/manageorders', component: OrderManagementPage },
+  { path: '/manageorders',
+    component: OrderManagementPage, 
+    children: [
+      {
+        path: 'details',
+        component: OrderManagementDetailsPage
+      }
+    ]
+  },
   
   // transporter
   { path: '/acceptdelivery', component: Acceptdeliver },
   { path: '/delivery', component: Delivery },
+  { path: '/driverDashboard', component: driverDashboard },
 
-  { path: '/chat', name:'Chat', component: Index }
 ]
 
 export const router = createRouter({
