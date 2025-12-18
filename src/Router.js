@@ -15,7 +15,7 @@ import OrderManagementPage from './page/admin/manageorders/index.vue'
 import OrderManagementDetailsPage from './page/admin/manageorders/OrderManagementDetailsPage.vue'
 import Acceptdeliver from './page/transporter/Acceptdeliver.vue'
 import Delivery from './page/transporter/Delivery.vue'
-
+import index from './page/chat/index.vue'
 import ProfilePage from './page/ProfilePage.vue'
 import driverDashboard from './page/transporter/driverDashboard.vue'
 
@@ -58,6 +58,9 @@ const routes = [
       }
     ]
   },
+
+  // chat
+  { path: '/chat', component: index },
   
   // transporter
   { path: '/acceptdelivery', component: Acceptdeliver },
