@@ -18,6 +18,8 @@ import Delivery from './page/transporter/Delivery.vue'
 import index from './page/chat/index.vue'
 import ProfilePage from './page/ProfilePage.vue'
 import driverDashboard from './page/transporter/driverDashboard.vue'
+import AcceptDelivery from './page/transporter/AcceptDelivery.vue'
+import DriverDeliveryDetails from './page/transporter/DriverDeliveryDetails.vue'
 
 
 const routes = [
@@ -66,6 +68,8 @@ const routes = [
   { path: '/acceptdelivery', component: Acceptdeliver },
   { path: '/delivery', component: Delivery },
   { path: '/driverDashboard', component: driverDashboard },
+  { path: '/accDelivery', component: AcceptDelivery},
+  { path: '/driverDeliveryDetail', component: DriverDeliveryDetails},
 
 ]
 
