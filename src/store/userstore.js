@@ -97,5 +97,25 @@ export const useUserStore = defineStore('user', {
       }
     },
 
+    async saveProfileEdits(data) {
+      try {
+        const res = await axios.put(`${API_URL}/auth/profile`, data, {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        });
+
+        this.user = res.data.user;
+        this.error = null;
+
+        this.success = res.data.message || "Profile updated successfully";
+        return { success: true, message: this.success };
+
+      } catch (err) {
+        const message = err.response?.data?.message || "Profile update failed";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
   }
 })
