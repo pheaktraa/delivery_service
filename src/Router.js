@@ -20,9 +20,12 @@ import ProfilePage from './page/ProfilePage.vue'
 import driverDashboard from './page/transporter/driverDashboard.vue'
 import AcceptDelivery from './page/transporter/AcceptDelivery.vue'
 import DriverDeliveryDetails from './page/transporter/DriverDeliveryDetails.vue'
+import DriverProfile from './page/transporter/DriverProfile.vue'
+
 
 
 const routes = [
+  // === PUBLIC ROUTES ===
   { path: '/', component: Landing },
   { path: '/home', component: Home },
   { path: '/auth/login', component: Loginpage },
@@ -39,8 +42,12 @@ const routes = [
       }
     ]
   },
-  { path: '/setting', component: SettingPage },
-  { path: '/manageuser', component: ManageUserPage },
+
+  // === ADMIN ROUTES ===
+  { path: '/admin/setting', component: SettingPage, meta: { layout: 'dashboard'} },
+  { path: '/admin/manageuser', component: ManageUserPage, meta: { layout: 'dashboard'} },
+  { path: '/admin/dashboard', component: DashboardPage, meta: { layout: 'dashboard'} },
+
   { path: '/mydeliveries', 
     component: MyDeliveries,
     children: [
@@ -50,7 +57,7 @@ const routes = [
       }
     ]
   },
-  { path: '/dashboard', component: DashboardPage },
+  
   { path: '/manageorders',
     component: OrderManagementPage, 
     children: [
@@ -64,12 +71,13 @@ const routes = [
   // chat
   { path: '/chat', component: index },
   
-  // transporter
-  { path: '/acceptdelivery', component: Acceptdeliver },
-  { path: '/delivery', component: Delivery },
-  { path: '/driverDashboard', component: driverDashboard },
-  { path: '/accDelivery', component: AcceptDelivery},
-  { path: '/driverDeliveryDetail', component: DriverDeliveryDetails},
+  // === TRANSPORTER / DRIVER ROUTES ===
+  { path: '/driver/profile', component: DriverProfile, meta: { layout: 'dashboard' } },
+  { path: '/driver/acceptdelivery', component: Acceptdeliver, meta: { layout: 'dashboard' } },
+  { path: '/driver/delivery', component: Delivery, meta: { layout: 'dashboard' }  },
+  { path: '/driver/driverDashboard', component: driverDashboard, meta: { layout: 'dashboard' }  },
+  { path: '/driver/accDelivery', component: AcceptDelivery, meta: { layout: 'dashboard' } },
+  { path: '/driver/delivery/detail/:id', component: DriverDeliveryDetails, meta: { layout: 'dashboard' } },
 
 ]
 

@@ -145,7 +145,7 @@ const handleMainAction = () => {
     // Here you would call your API to update status
   } else {
     // If finished, go back to dashboard
-    router.push('/accDelivery')
+    router.push('/driver/accDelivery')
   }
 }
 

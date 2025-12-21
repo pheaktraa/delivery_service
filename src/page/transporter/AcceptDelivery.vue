@@ -1,10 +1,15 @@
 <template>
   <!-- Main Container -->
-  <div class="max-w-[80rem] h-full m-auto page">
+  <div class="p-8 max-w-7xl mx-auto bg-(--gray-100)">
     
     <!-- Header -->
     <div class="mb-[2rem]">
-      <h1 class="text-3xl font-bold text-(--gray-800)">Available Orders</h1>
+      <h1 class="text-3xl font-bold text-(--red-800)">Available Orders</h1>
+    </div>
+
+    <!-- LOADING / EMPTY STATE SAFETY -->
+    <div v-if="getdata.length === 0" class="text-center py-20 text-(--gray-400)">
+      No orders available right now.
     </div>
 
     <!-- GRID LAYOUT -->
@@ -22,7 +27,7 @@
         <div class="mb-[1rem]">
           <!-- Price Badge (Top Right) -->
           <div class="flex justify-between items-start mb-[1rem]">
-            <span class="text-xl font-bold text-(--gray-400) uppercase">Pickup Location</span>
+            <span class="text-xs font-bold text-(--gray-400) uppercase">Pickup Location</span>
             <span class="text-xl font-bold text-green-600">
               ${{ item.price || '0.00' }} <!-- Fallback if no price in DB yet -->
             </span>
@@ -37,7 +42,7 @@
 
           <!-- To -->
           <div class="">
-            <span class="text-xl font-bold text-(--gray-400) uppercase">Dropoff Location</span>
+            <span class="text-xs font-bold text-(--gray-400) uppercase">Dropoff Location</span>
             <p class="font-bold text-black text-lg line-clamp-1">
               {{ item.drop_off_address || 'Destination' }} <!-- Adjust key based on DB -->
             </p>
@@ -45,12 +50,15 @@
         </div>
 
         <!-- MIDDLE SECTION: Weight/Details -->
-        <div class="flex items-center gap-2 mb-[1rem]">
-           <span class="text-xl bg-red-500 rounded-xl">📦</span>
+        <div class="flex items-center gap-3 mb-6 rounded-lg">
+           <!-- FIXED ICON CONTAINER -->
+           <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center text-xl">
+             📦
+           </div>
            <div>
-             <p class="text-xs text-(--gray-500) font-bold uppercase">Weight</p>
-             <p class="text-xl font-bold text-black">
-               {{ item.weight || 'N/A' }} kg
+             <p class="text-xs text-gray-500 font-bold uppercase">Weight</p>
+             <p class="text-xl font-bold text-gray-800">
+               {{ item.weight }} kg
              </p>
            </div>
         </div>
@@ -138,7 +146,7 @@ onMounted(async () => {
 // Function to handle navigation
 const goToDetail = (orderId: number) => {
   console.log("Navigating to order ID:", orderId);
-  // router.push(`/driverDeliveryDetail/${orderId}`);
-  router.push(`/driverDeliveryDetail`);
+  router.push(`/driver/delivery/detail/${orderId}`);
+  // router.push(`/driverDeliveryDetail`);
 };
 </script>
