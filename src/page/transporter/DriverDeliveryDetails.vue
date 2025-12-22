@@ -123,14 +123,21 @@ onMounted(async () => {
 const currentStep = ref(0) 
 
 const mapUrl = computed(() => {
-  if (currentStep.value <= 1) {
-    // Show Pickup Location (Toul Kork)
-    return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.773!2d104.890!3d11.570!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109519fe4077d69%3A0x20138e8221432e6!2sToul%20Kork!5e0!3m2!1sen!2skh"
-  } else {
-    // Show Dropoff Location (Boeung Kak)
-    return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3908.6!2d104.91!3d11.58!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109514!2sBoeung%20Kak!5e0!3m2!1sen!2skh"
-  }
-})
+  if (!order.value) return "";
+
+  const address =
+    currentStep.value <= 1
+      ? order.value.pick_up_address
+      : order.value.destination_address;
+
+  if (!address) return "";
+
+  return `https://www.google.com/maps/embed/v1/place?key=${
+    import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+  }&q=${encodeURIComponent(address)}`;
+});
+
+
 
 // 4. ACTION HANDLER
 const handleMainAction = async () => {
