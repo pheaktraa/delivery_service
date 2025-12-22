@@ -179,9 +179,11 @@ async function handleLogin() {
   let res;
 
    if (logindata.value.role === "transporter") {
-    res = await userStore.loginTransporter(logindata.value);
+     res = await userStore.loginTransporter(logindata.value);
+    
   } else {
-    res = await userStore.login(logindata.value);
+     res = await userStore.login(logindata.value);
+    
    }
   
   showMessage.value = true;

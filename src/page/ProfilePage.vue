@@ -12,13 +12,13 @@
                  alt=""
                 class="w-50 h-50 rounded-full object-cover border-4 border-(--gray-500)">
             </img>
-            <div>
+            <div class="flex items-center">
               <p class="text-[length:var(--text-title)] font-bold text-(--gray-800) mb-[1rem]">
                 {{ user?.username }}</p>
-              <span
+              <!-- <span
                   class="text-[length:var(--text-description)] bg-(--gray-100) border border-(--gray-700) px-2 py-1 rounded text-(--gray-800)">
                   ID: {{ user?.id }}
-                  </span>
+                  </span> -->
             </div>
           </div>
           <div class="me-[1rem]">
@@ -41,9 +41,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Full Name -->
           <div>
-            <label class="block font-bold text-(--gray-800) uppercase mb-[0.5rem]">Full Name</label>
+            <label class="block font-bold text-(--gray-800) uppercase mb-[0.5rem]">First Name</label>
             <input
-              v-model="form.username"
+              v-model="form.firstname"
               disabled
               class="w-full bg-white border p-3 rounded"
               type="text"
@@ -52,9 +52,9 @@
 
           <!-- Phone Number -->
           <div>
-            <label class="block font-bold text-(--gray-800) uppercase mb-[0.5rem]">Phone Number</label>
+            <label class="block font-bold text-(--gray-800) uppercase mb-[0.5rem]">Last Name</label>
             <input
-              v-model="form.phone"
+              v-model="form.lastname"
               disabled
               class="w-full bg-white border p-3 rounded"
               type="tel"
@@ -71,19 +71,6 @@
               type="email"
               placeholder="Email" />
           </div>
-
-          <!-- Address -->
-          <div class="col-span-2">
-            <label class="block font-bold text-(--gray-800) uppercase mb-[0.5rem]">Address</label>
-            <input
-              v-model="form.address"
-              :readonly="!isEditing"
-              @focus="startEditing"
-              @click="startEditing"
-              class="w-full bg-white border p-3 rounded"
-              type="text"
-              placeholder="Address" />
-          </div>   
         </div>
       </div>
 
@@ -109,49 +96,76 @@
 </template>
 
 <script setup>
-import { ref, reactive,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import getUserPayload from '../utils/jwt';
+import { first, last } from 'lodash-es';
 
 const isEditing = ref(false);
-const user = reactive({ id: '', username: '', email: '', role: '', avatar: '' });
-const form = reactive({ username: '', email: '', phone: '', address: '' });
-let original = {};
+
+const user = ref({
+  id: '',
+  lastname: '',
+  firstname: '',
+  username: '',
+  email: '',
+  role: '',
+  avatar: ''
+});
+
+const form = ref({
+  firstname: '',  
+  lastname: '',
+  email: '',
+  phone: '',
+  address: ''
+});
+
+const original = ref({});
 
 const defaultAvatar = 'https://via.placeholder.com/150';
 
-onMounted(async () => {
+onMounted(() => {
   const token = localStorage.getItem('token');
   if (!token) return;
 
-  // Option A: use decoded JWT immediately
   const payload = getUserPayload();
   if (payload) {
-    user.id = payload.userId;
-    user.username = payload.username;
-    user.email = payload.email;
-    form.username = user.username;
-    form.email = user.email;
-  }
-})
+    user.value.id = payload.userId;
+    user.value.firstname = payload.firstname;
+    user.value.lastname = payload.lastname;
+    user.value.username = payload.username;
+    user.value.email = payload.email;
 
-async function saveProfile() {
-  // Simulate saving data to server
-  original = { ...form };
-  isEditing.value = false;
-  await userStore.saveProfileEdits(form);
-}
+    form.value.firstname = payload.firstname;
+    form.value.lastname = payload.lastname;
+    form.value.email = payload.email;
+  }
+  console.log(payload);
+  
+});
+
+/* ======================
+   EDIT HANDLERS
+====================== */
 
 function startEditing() {
+  original.value = { ...form.value };
   isEditing.value = true;
 }
 
 function cancelEdit() {
-  form.username = original.username;
-  form.email = original.email;
-  form.phone = original.phone;
-  form.address = original.address;
+  form.value = { ...original.value };
   isEditing.value = false;
 }
+
+async function saveProfile() {
+  console.log('Saved profile:', form.value);
+  isEditing.value = false;
+}
+
+/* ======================
+   HELPERS
+====================== */
 
 const getImage = (name) => {
   if (!name) return defaultAvatar;
@@ -165,5 +179,5 @@ const getImage = (name) => {
 const logout = () => {
   localStorage.removeItem('token');
   window.location.href = '/';
-}
+};
 </script>
