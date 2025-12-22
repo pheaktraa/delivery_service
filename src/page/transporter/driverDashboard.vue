@@ -28,7 +28,7 @@
                     </div>
                     <!-- TEXT INFO -->
                     <div class="">
-                        <p class="text-[2rem] font-bold">{{ stats.earnings }}</p>
+                        <p class="text-[2rem] font-bold">{{ getdata.length }}</p>
                         <p class="font-bold">Total Earnings</p>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     </div>
                     <!-- TEXT INFO -->
                     <div>
-                        <p class="text-[2rem] font-bold">{{ stats.delivered }}</p>
+                        <p class="text-[2rem] font-bold">{{ getdata.length }}</p>
                         <p class="font-bold">Total Delivered</p>
                     </div>
                 </div>
@@ -62,25 +62,27 @@
                 <!-- Header -->
                 <div class="flex justify-between items-center p-6 border-b border-(--gray-300)">
                     <h2 class="text-xl font-bold text-(--gray-800)">Recent History</h2>
-                    <!-- This button would link to your full History Page -->
-                    <button class="text-sm font-bold text-(--gray-500) hover:text-red-600">View All ></button>
                 </div>
 
                 <!-- Table List -->
                 <div class="divide-y divide-(--gray-300)">
 
-                    <div v-for="item in recentHistory" :key="item.id"
+                    <div v-for="item in getdata" :key="item.id"
                         class="p-6 flex items-center justify-between hover:bg-(--gray-100) transition duration-300">
 
                         <!-- Column 1: Route & ID -->
                         <div>
-                            <p class="font-bold text-(--gray-800) text-lg">{{ item.route }}</p>
-                            <p class="text-sm text-(--gray-400) font-bold mt-1">Order {{ item.id }}</p>
+                            <div class="flex">
+                                <p class="font-bold text-(--gray-800) text-lg">{{ item.pick_up_address }}</p> 
+                                <img src="../../assets/icon/arrowleft.svg" alt="" class="px-5">
+                                <p class="font-bold text-(--gray-800) text-lg">{{ item.destination_address }}</p>
+                            </div>
+                            <p class="text-sm text-(--gray-400) font-bold mt-1">Order {{ item.delivery_id }}</p>
                         </div>
 
                         <!-- Column 2: Price & Status -->
                         <div class="text-right">
-                            <p class="text-xl font-bold text-green-600 mb-1">${{ item.price.toFixed(2) }}</p>
+                            <p class="text-xl font-bold text-green-600 mb-1">${{ item.total_amount }}</p>
                         </div>
 
                     </div>
@@ -88,7 +90,7 @@
                 </div>
 
                 <!-- Empty State (Optional) -->
-                <div v-if="recentHistory.length === 0" class="p-8 text-center text-gray-400">
+                <div v-if="getdata.length === 0" class="p-8 text-center text-gray-400">
                     No recent deliveries found.
                 </div>
 
@@ -100,19 +102,16 @@
 
 
 <script setup>
-import { reactive } from 'vue'
+import { onMounted,ref } from 'vue'
+import useCreateDeliveryStore  from '../../store/createDelivery' 
+const createDeliveryStore = useCreateDeliveryStore()
 
-// Mock Data: This simulates the list of orders coming from the database
-// Stats Data (Keep this)
-const stats = reactive({
-    earnings: 75,
-    delivered: 75
-})
-// Recent History Data (Mock)
-// Only show the last 3 or 4 items here
-const recentHistory = reactive([
-    { id: '#9981', route: 'Tuol Kork → Sen Sok', price: 5.00, status: 'Completed' },
-    { id: '#9980', route: 'BKK1 → Riverside', price: 2.50, status: 'Cancelled' },
-    { id: '#9979', route: 'Airport → Olympia', price: 8.00, status: 'Cancelled' },
-])
+const getdata = ref([])
+
+onMounted(async () => {
+    const data = await createDeliveryStore.getTransporterDeliveries()
+    getdata.value = data
+    console.log("Driver Deliveries:", getdata.value)
+})  
+
 </script>

@@ -141,7 +141,27 @@ const useCreateDeliveryStore = defineStore('createDelivery', {
         this.error = message;
         return { success: false, message };
       }
-    }
+    },
+    async getTransporterDeliveries() {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `${API_URL}/getdeliveriesbytransporter`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        return res.data.deliveries || [];
+
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to fetch transporter deliveries";
+        this.error = message;
+        return [];
+      }   
+    },
 
   }
 });

@@ -82,7 +82,7 @@
                       : 'bg-(--gray-100) text-(--gray-600)',
                   ]"
                 >
-                  {{ delivery.status }}
+                  {{ delivery.status  || 'waiting for acceptance' }}
                 </span>
               </td>
 
