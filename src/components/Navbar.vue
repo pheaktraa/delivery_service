@@ -54,7 +54,9 @@
 
 <script setup>
 import getUserPayload from "../utils/jwt";
+import { useRouter } from "vue-router";
 import { ref } from "vue";
+const router = useRouter();
 
 const listmenu = [
   {
@@ -123,6 +125,7 @@ if (user.value && user.value.role === 'user') {
   console.log(user.value.username);
 } else if (user.value && user.value.role === 'transporter') {
   showacc.value = true;
+  router.push('/driver/accDelivery');
   console.log(user.value.role);
   console.log(parseInt(user.value.id));
   console.log(user.value.username);

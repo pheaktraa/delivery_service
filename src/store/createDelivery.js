@@ -70,6 +70,77 @@ const useCreateDeliveryStore = defineStore('createDelivery', {
         this.error = message;
         return [];
       }
+    },
+    async getDeliveryById(deliveryId) {
+      if (!deliveryId) {
+        throw new Error("Delivery ID is missing");
+      }
+
+      const res = await axios.get(
+        `${API_URL}/getdeliverybyid/${deliveryId}`
+      );
+
+      return res.data;
+    },
+    async acceptDelivery(deliveryId) {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.post(
+          `${API_URL}/transporter/accept`,
+          { delivery_id: deliveryId },
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
+        this.success = res.data.message || "Delivery accepted successfully";
+        this.error = null;
+
+        return {
+          success: true,
+          message: this.success,
+          delivery: res.data.delivery // 👈 return accepted delivery
+        };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to accept delivery";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+    async updateDeliveryStatus(deliveryId, status) {
+      try {
+        const token = localStorage.getItem("token");
+
+        // Make sure the payload matches backend expectations
+        const statusMap = {
+          1: "accepted",
+          2: "in_transit",
+          3: "delivered"
+        };
+        const payload = { delivery_id: deliveryId, status: statusMap[status] };
+
+        console.log("Updating delivery status with payload:", payload);
+
+        const res = await axios.patch(
+          `${API_URL}/transporter/status`,
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        this.success = res.data.message || "Delivery status updated successfully";
+        this.error = null;
+
+        return {
+          success: true,
+          message: this.success,
+          delivery: res.data.delivery
+        };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to update delivery status";
+        console.error("UpdateDeliveryStatus Error:", err.response?.data || err);
+        this.error = message;
+        return { success: false, message };
+      }
     }
 
   }
