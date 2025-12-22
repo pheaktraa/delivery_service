@@ -6,9 +6,13 @@ const getUserPayload = () => {
     if (!token) return null;
 
     const decodedPayload = jwtDecode(token);
+    console.log(jwtDecode(localStorage.getItem('token')));
+    
     return {
-      userId: decodedPayload.id || decodedPayload.sub || decodedPayload.transporter_id,
+      userId: decodedPayload.id,
       username: decodedPayload.firstname + " " + decodedPayload.lastname,
+      firstname: decodedPayload.firstname,
+      lastname: decodedPayload.lastname,
       email: decodedPayload.email,
       role: decodedPayload.role,
     };
