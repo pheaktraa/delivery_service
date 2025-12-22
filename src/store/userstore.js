@@ -119,5 +119,26 @@ export const useUserStore = defineStore('user', {
         return { success: false, message };
       }
     },
+
+    async gettransporterprofile(id) {
+      try {
+        const token = localStorage.getItem("transporter_token");
+        const res = await axios.get(
+          `${API_URL}/transporter/transporterprofile/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        return res.data.transporter || null;
+
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to fetch profile";
+        this.error = message;
+        return null;
+      }
+    } 
   }
 })

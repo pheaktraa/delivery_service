@@ -34,37 +34,37 @@
           <!-- Fname -->
           <div>
             <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">First Name</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.firstname || 'N/A' }}</div>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.firstname || 'N/A' }}</div>
           </div>
 
           <!-- Lname -->
           <div>
             <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">Last Name</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.lastname || 'N/A' }}</div>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.lastname || 'N/A' }}</div>
           </div>
 
           <!-- Email -->
           <div>
             <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">Email</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.email || 'N/A' }}</div>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.email || 'N/A' }}</div>
           </div>
 
           <!-- Phone -->
           <div>
-            <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">Phone Number</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.phoneNumber || 'N/A' }}</div>
+            <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">License Plate</label>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.license_plate || 'N/A' }}</div>
           </div>
 
           <!-- Role -->
           <div>
             <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">Account Role</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.role || 'N/A' }}</div>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.role || 'N/A' }}</div>
           </div>
 
           <!-- Vehicle Type -->
           <div>
             <label class="block text-xs font-bold text-(--gray-400) uppercase mb-[1rem]">Vehicle Type</label>
-            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ user?.vehicletype || 'N/A' }}</div>
+            <div class="w-full p-3 border border-(--gray-300) rounded-lg bg-white font-bold text-(--gray-800)">{{ getdata?.vehicle_type || 'N/A' }}</div>
           </div>
 
         </div>
@@ -76,22 +76,22 @@
 </template>
 
 <script setup>
-import { computed,onMounted  } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useProfileStore } from '../../store/profileStore';
 import getUserPayload from '../../utils/jwt';
+import { useUserStore } from '../../store/userstore';
 
 // 1. Initialize the New Store
 const profileStore = useProfileStore(); 
 const tokenData = getUserPayload();
-
+const userStore = useUserStore();
+const getdata = ref([]);
+console.log(tokenData);
 onMounted(async () => {
-console.log('tokenData:', tokenData) // debug
-  const userId = tokenData?.id || tokenData?.sub || 'mock-id' 
-  if (userId) {
-    // 2. Call the action from the NEW store
-    await profileStore.fetchProfile(userId);
-  }
+  const data = await userStore.gettransporterprofile(tokenData?.userId);
+  getdata.value = data;
 });
+
 
 // 3. Get Data from the NEW store
 const user = computed(() => profileStore.data);

@@ -30,7 +30,7 @@
 
     <!-- LOGOUT -->
     <div class=" w-full mt-[1rem] pt-4 border-t-3 border-white">
-      <button class="w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white hover:text-red-700 transition duration-200">
+      <button @click="logout" class="w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white hover:text-red-700 transition duration-200">
         <span class="text-[2rem]">🚪</span> Logout
       </button>
     </div>
@@ -43,6 +43,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router' // To verify active link
 import getUserPayload from '../utils/jwt' // Your existing JWT utils
 
+const route = useRoute()
 // 1. DATA: Define the Menus separately
 const adminMenu = [
   { name: "Dashboard", path: "/admin/dashboard", icon: "📊" },
@@ -70,6 +71,10 @@ const currentMenu = computed(() => {
   }
 })
 
-// Optional: To highlight the active link
-const route = useRoute()
+const logout = () => {
+  // Implement your logout logic here
+  localStorage.removeItem('token');
+  window.location.href = '/';
+} 
+
 </script>
