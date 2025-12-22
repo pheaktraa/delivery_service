@@ -7,7 +7,7 @@
     <div class="flex justify-between items-center mb-[2rem]">
       <div>
         <h1 class="text-3xl font-bold text-(---gray-800)">Order Detail</h1>
-        <p class="text-(--gray-500)">Order ID: #{{ order.id }}</p>
+        <p class="text-(--gray-500)">Order ID: #{{ order.delivery_id  }}</p>
       </div>
       
       <!-- Back Button -->
@@ -42,14 +42,14 @@
             <div>
               <span :class="['px-3 py-1 rounded-full text-xs font-bold uppercase', 
                 currentStep === 3 ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700']">
-                {{ currentStep === 0 ? 'Waiting for Driver' : (currentStep === 3 ? 'Completed' : 'In Progress') }}
+                {{ currentStep === 0 ? 'Waiting for Driver' :currentStep === 1 ? 'Accepted' : (currentStep === 2 ? 'In Transit' : 'Delivered') }}
               </span>
             </div>
 
             <!-- 1. FROM -->
             <div :class="['p-4 rounded-xl border transition', currentStep <= 1 ? 'border-red-500 bg-red-50' : 'border-gray-100']">
               <p class="text-xs font-bold text-(--gray-400) uppercase mb-1">From (Pickup)</p>
-              <p class="text-xl font-bold text-(--gray-800)">{{ order.pickup }}</p>
+              <p class="text-xl font-bold text-(--gray-800)">{{ order.pick_up_address }}</p>
               <div class="mt-[1rem] flex gap-2">
                 <button class="text-xs bg-white border px-3 py-1 rounded font-bold">📞 {{ order.pickupPhone }}</button>
               </div>
@@ -58,9 +58,9 @@
             <!-- 2. TO -->
             <div :class="['p-4 rounded-xl border transition', currentStep === 2 ? 'border-blue-500 bg-blue-50' : 'border-gray-100']">
               <p class="text-xs font-bold text-(--gray-400) uppercase mb-1">To (Dropoff)</p>
-              <p class="text-xl font-bold text-(--gray-800)">{{ order.dropoff }}</p>
+              <p class="text-xl font-bold text-(--gray-800)">{{ order.destination_address }}</p>
               <div class="mt-[1rem] flex gap-2">
-                <button class="text-xs bg-white border px-3 py-1 rounded font-bold">📞 {{ order.dropoffPhone }}</button>
+                <button class="text-xs bg-white border px-3 py-1 rounded font-bold">📞 {{ order.receiver_contact }}</button>
               </div>
             </div>
 
@@ -72,8 +72,8 @@
               </div>
               <div>
                 <p class="text-xs font-bold text-(--gray-400) uppercase">Payment</p>
-                <p class="font-bold text-green-600">${{ order.price }}</p>
-                <p class="font-bold text-(--gray-800)">{{ order.paymentMethod }}</p>
+                <p class="font-bold text-green-600">${{ order.total_amount  }}</p>
+                <p class="font-bold text-(--gray-800)">{{ order.payment_type }}</p>
               </div>
             </div>
           </div>
@@ -100,34 +100,28 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import useCreateDeliveryStore from '../../store/createDelivery'
 
 const route = useRoute()
 const router = useRouter()
-const orderId = route.params.id
+const deliveryStore = useCreateDeliveryStore()
+const order = ref({})
+const orderId = Number(route.params.id);
+console.log("delivered_id", orderId);
 
-// 1. STATE: Track the delivery progress
-// 0 = Job Offer (Not Accepted yet)
-// 1 = Accepted (Heading to Pickup)
-// 2 = Picked Up (Heading to Dropoff)
-// 3 = Delivered
-const currentStep = ref(0) 
-
-// 2. MOCK DATA (Simulates fetching from Backend using ID)
-const order = ref({
-  id: orderId || '124815',
-  status: 'Pending',
-  pickup: 'Toul Kork, Street 315',
-  pickupPhone: '012 999 888',
-  dropoff: 'Boeung Kak, Street 598',
-  dropoffPhone: '098 777 666',
-  itemType: 'Electronic Parts',
-  weight: '1kg',
-  price: 5.00,
-  paymentMethod: 'Cash on Delivery'
+onMounted(async () => {
+  try {
+    const data = await deliveryStore.getDeliveryById(orderId)
+    order.value = data.delivery
+    console.log('Loaded delivery:', order.value)
+  } catch (err) {
+    console.error('Failed to load delivery', err)
+    router.back()
+  }
 })
 
-// 3. DYNAMIC MAP URL
-// Switches map view based on where the driver needs to go
+const currentStep = ref(0) 
+
 const mapUrl = computed(() => {
   if (currentStep.value <= 1) {
     // Show Pickup Location (Toul Kork)
@@ -139,15 +133,37 @@ const mapUrl = computed(() => {
 })
 
 // 4. ACTION HANDLER
-const handleMainAction = () => {
-  if (currentStep.value < 3) {
-    currentStep.value++
-    // Here you would call your API to update status
-  } else {
-    // If finished, go back to dashboard
-    router.push('/driver/accDelivery')
+const handleMainAction = async () => {
+  try {
+    if (currentStep.value === 0) {
+      // Accept delivery
+      const result = await deliveryStore.acceptDelivery(orderId)
+      if (result.success) {
+        order.value = result.delivery
+        currentStep.value = 1
+      } else {
+        alert(result.message)
+      }
+    } else if (currentStep.value === 1 || currentStep.value === 2) {
+      // Update delivery status
+      const result = await deliveryStore.updateDeliveryStatus(orderId, currentStep.value + 1)
+      if (result.success) {
+        order.value = result.delivery
+        currentStep.value += 1
+      } else {
+        alert(result.message)
+      }
+    } else if (currentStep.value === 3) {
+      router.push('/driver/accDelivery')
+    }
+  } catch (err) {
+    console.error(err)
+    alert('Something went wrong.')
   }
 }
+
+
+
 
 // 5. BUTTON TEXT LOGIC
 const buttonText = computed(() => {
