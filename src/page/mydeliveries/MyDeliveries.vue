@@ -22,7 +22,7 @@
             class="p-[.5rem] bg-white border-2 border-(--gray-300) rounded-md focus:outline-none focus:ring-1 focus:ring-(--gray-500)"
           >
             <option value="all">All</option>
-            <option value="pending">Pending</option>
+            <option value="in_transit">In_Transit</option>
             <option value="delivered">Delivered</option>
             <option value="accepted">Accepted</option>
           </select>
@@ -75,10 +75,12 @@
                 <span
                   :class="[
                     'px-2 py-1 rounded-full text-sm font-bold border',
-                    delivery.status === 'Delivered'
+                    delivery.status === 'delivered'
                       ? 'bg-green-50 text-green-700 border-green-200'
-                      : delivery.status === 'Pending'
+                    : delivery.status === 'in_transit'
                       ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                    : delivery.status === 'accepted'
+                      ? 'bg-blue-50 text-blue-700 border-blue-200'
                       : 'bg-(--gray-100) text-(--gray-600)',
                   ]"
                 >
@@ -138,7 +140,7 @@ const filteredDeliveries = computed(() => {
   if (selectedStatus.value === 'all') return getdata.value;
 
   return getdata.value.filter(item => 
-    item.status.toLowerCase() === selectedStatus.value
+    item.status === selectedStatus.value
   );
 });
 
