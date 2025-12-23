@@ -37,7 +37,7 @@
                 >
                   {{ item.name }} (x{{ item.quantity }})
                 </p>
-                <p><strong>ID:</strong> {{ item.id }}</p>
+                <p><strong>ID:</strong> {{ item.user_id }}</p>
                 <p><strong>Date:</strong> {{ item.date.split("T")[0] }}</p>
                 <p>
                   <strong>Status: </strong>
@@ -94,7 +94,6 @@
               <strong>Recipient Contact:</strong> {{ item.receiver_contact }}
             </p>
             <p><strong>delivery_id:</strong> {{ item.delivery_id }}</p>
-            {{ item.user_id }}
             <router-link> </router-link>
             <div class="flex justify-between">
               <p>
@@ -112,7 +111,7 @@
                   <img
                     src="../../assets/icon/chaticon.svg"
                     alt=""
-                    class="w-[1.5rem] z-1"
+                    class="w-[1.5rem] z-1 hover:cursor-pointer"
                   />
                   <div
                     class="w-[2rem] h-[2rem] bg-(--red-800) rounded-full absolute z-2 flex items-center justify-center left-[2rem] top-[-1rem]"

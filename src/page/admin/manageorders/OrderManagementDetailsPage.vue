@@ -43,7 +43,7 @@
               <!-- Right side -->
               <div class="flex flex-col gap-2 items-end">
                 <button 
-                  class="text-(--gray-100) border border-(--red-900) rounded-lg p-[.5rem] bg-(--red-700) hover:bg-(--red-800) hover:cursor-pointer">
+                  class="text-(--gray-100) border border-(--red-900) rounded-lg p-[.5rem] bg-(--red-800) hover:bg-(--red-700) transition duration-300 hover:cursor-pointer">
                   Delete
                 </button>
               </div>
