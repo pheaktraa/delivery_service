@@ -130,6 +130,12 @@ if (user.value && user.value.role === 'user') {
   console.log(parseInt(user.value.id));
   console.log(user.value.username);
 }
+else if (user.value && user.value.role === 'admin') {
+  showacc.value = true;
+  router.push('/admin/dashboard');
+  console.log(user.value.role);
+  console.log(parseInt(user.value.id));
+}
 else {
   showacc.value = false;
 }
