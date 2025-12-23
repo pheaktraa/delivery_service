@@ -146,6 +146,8 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "../store/userstore";
+import { useRouter } from "vue-router";
+const router = useRouter();
 import { Eye, EyeOff } from "lucide-vue-next";
 
 const userStore = useUserStore();
@@ -153,7 +155,7 @@ const userStore = useUserStore();
 const logindata = ref({
   email: "",
   password: "",
-  role: ""
+  role: "",
 });
 const registerData = ref({
   firstname: "",
@@ -178,23 +180,27 @@ async function handleLogin() {
   }
   let res;
 
-   if (logindata.value.role === "transporter") {
-     res = await userStore.loginTransporter(logindata.value);
-    
+  if (logindata.value.role === "transporter") {
+    res = await userStore.loginTransporter(logindata.value);
   } else {
-     res = await userStore.login(logindata.value);
-    
-   }
-  
+    res = await userStore.login(logindata.value);
+  }
+
   showMessage.value = true;
   setTimeout(() => (showMessage.value = false), 1500);
 
   if (res.success) {
     showMessage.value = true;
+
+    const roleRedirect = {
+      transporter: "/acceptdelivery",
+      admin: "/admin/dashboard",
+      user: "/home",
+    };
+    console.log(logindata.value.role);
+    
     setTimeout(() => {
-      window.location.href = logindata.value.role === "transporter"
-          ? "/acceptdelivery"
-          : "/home";
+      router.push(roleRedirect[logindata.value.role] || "/home");
     }, 1500);
   }
 }

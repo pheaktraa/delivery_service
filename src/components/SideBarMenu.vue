@@ -47,7 +47,7 @@ const route = useRoute()
 // 1. DATA: Define the Menus separately
 const adminMenu = [
   { name: "Dashboard", path: "/admin/dashboard", icon: "📊" },
-  { name: "Manage Users", path: "/admin/user", icon: "👥" },
+  { name: "Manage Users", path: "/admin/manageuser", icon: "👥" },
   { name: "Settings", path: "/admin/setting", icon: "⚙️" },
 ]
 
