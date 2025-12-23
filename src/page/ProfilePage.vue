@@ -24,7 +24,7 @@
           <div class="me-[1rem]">
             <button 
               @click="logout"
-              class="border bg-(--red-800) border-(--red-800) text-(--gray-100) px-4 py-2 rounded-lg hover:cursor-pointer hover:opacity-80">
+              class="border bg-(--red-800) border-(--red-800) text-(--gray-100) px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-(--red-700) transition duration-300">
               Log Out</button>
           </div>
         </div>

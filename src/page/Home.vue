@@ -20,7 +20,7 @@
         </p>
         <router-link to="/createdelivery">
           <button
-            class="bg-[var(--red-800)] text-white px-4 py-2 rounded-[.5rem]"
+            class="bg-[var(--red-800)] text-white px-4 py-2 rounded-[.5rem] transition-all duration-300 hover:scale-102 hover:shadow-lg border-0"
           >
             Create Delivery
           </button>
@@ -127,7 +127,7 @@
           <br />
           <button
             type="submit"
-            class="px-[2.5rem] py-[.5rem] bg-(--red-800) text-white rounded-[.5rem]"
+            class="px-[2.5rem] py-[.5rem] bg-(--red-800) text-white rounded-[.5rem] transition-all duration-300 hover:scale-102 hover:shadow-lg border-0"
           >
             Send
           </button>

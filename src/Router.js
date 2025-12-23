@@ -42,13 +42,7 @@ const routes = [
       }
     ]
   },
-
-  // === ADMIN ROUTES ===
-  { path: '/admin/setting', component: SettingPage, meta: { layout: 'dashboard'} },
-  { path: '/admin/manageuser', component: ManageUserPage, meta: { layout: 'dashboard'} },
-  { path: '/admin/dashboard', component: DashboardPage, meta: { layout: 'dashboard'} },
-
-  { path: '/mydeliveries', 
+   { path: '/mydeliveries', 
     component: MyDeliveries,
     children: [
       {
@@ -57,13 +51,19 @@ const routes = [
       }
     ]
   },
-  
-  { path: '/manageorders',
+
+  // === ADMIN ROUTES ===
+  { path: '/admin/setting', component: SettingPage, meta: { layout: 'dashboard'} },
+  { path: '/admin/manageuser', component: ManageUserPage, meta: { layout: 'dashboard'} },
+  { path: '/admin/dashboard', component: DashboardPage, meta: { layout: 'dashboard'} },
+  { path: '/admin/manageorders',
     component: OrderManagementPage, 
+    meta: { layout: 'dashboard' },
     children: [
       {
         path: 'details',
-        component: OrderManagementDetailsPage
+        component: OrderManagementDetailsPage,
+        meta: { layout: 'dashboard' }
       }
     ]
   },
