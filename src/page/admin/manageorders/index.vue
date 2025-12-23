@@ -1,5 +1,5 @@
 <template>
-  <OrderManagementPage v-if="route.path !== '/manageorders/details'"></OrderManagementPage>
+  <OrderManagementPage v-if="route.path !== '/admin/manageorders/details'"></OrderManagementPage>
   <router-view></router-view>
 </template>
 

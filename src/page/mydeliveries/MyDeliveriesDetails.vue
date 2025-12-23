@@ -44,14 +44,16 @@
                   <span
                     :class="[
                       'px-2 py-1 rounded-full text-sm font-bold border',
-                      item.status === 'Delivered'
+                      item.status === 'delivered'
                         ? 'bg-green-50 text-green-700 border-green-200'
-                        : item.status === 'Pending'
+                        : item.status === 'in_transit'
                         ? 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                        : item.status === 'accepted'
+                        ? 'bg-blue-50 text-blue-700 border-blue-200'
                         : 'bg-(--gray-100) text-(--gray-600)',
                     ]"
                   >
-                    {{ item.status }}
+                    {{ item.status || 'waiting for acceptance' }}
                   </span>
                 </p>
               </div>
@@ -163,4 +165,6 @@ const openChat = async () => {
 
   router.push("/chat");
 };
+
+
 </script>

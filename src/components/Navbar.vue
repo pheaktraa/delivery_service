@@ -1,5 +1,5 @@
 <template>
-  <nav class="w-full h-[4.25rem] fixed z-50 top-0">
+  <nav class="main-navbar w-full h-[4.25rem] fixed z-50 top-0">
     <div class="max-w-[80rem] h-full m-auto flex items-center justify-between">
       <img src="../assets/img/logo.png" alt="" class="h-[7rem] ml-[-1.25rem]" />
       <ul class="flex gap-9 menu"  v-if="user?.role === 'user'">
@@ -143,7 +143,7 @@ else {
 
 const changeColor = () => {
   const scrollY = window.scrollY;
-  const nav = document.querySelector("nav");
+  const nav = document.querySelector(".main-navbar");
   if (scrollY >= 50) {
     nav.style.backgroundColor = "var(--gray-100)";
     nav.style.boxShadow =
