@@ -1,34 +1,37 @@
 <template>
-  <div class="p-8 max-w-6xl min-h-screen mx-auto bg-(--gray-100)">
-    <div class="">
-    
+  <div class="p-8 max-w-6xl min-h-screen mx-auto bg-gray-100">
     <!-- PAGE TITLE -->
-    <div class="border-b-[2px] border-(--gray-300) pb-[1rem]">
-        <p class="text-(--red-800) text-[length:var(--text-title)] font-bold">
-          User Management
-        </p>
-      </div>
+    <div class="border-b-2 border-gray-300 pb-4">
+      <p class="text-red-800 text-2xl font-bold">User Management</p>
+    </div>
 
-    <!-- TABS CONTROLLER -->
-    <div class="flex gap-2 bg-(--gray-700) p-1.5 rounded-xl w-fit mt-[2rem]">
-      <button 
-        @click="activeTab = 'Customers'"
-        :class="['px-6 py-2 rounded-lg font-bold text-sm', 
-        activeTab === 'Customers' ? 'bg-white text-(--gray-800)' : 'text-white hover:text-(--gray-500)']"
+    <!-- TABS -->
+    <div class="flex gap-2 bg-gray-700 p-1.5 rounded-xl w-fit mt-6">
+      <button
+        @click="activeTab = 'user'"
+        :class="[
+          'px-6 py-2 rounded-lg font-bold text-sm',
+          activeTab === 'user'
+            ? 'bg-white text-gray-800'
+            : 'text-white hover:text-gray-400',
+        ]"
       >
         Customers
       </button>
-      <button 
-        @click="activeTab = 'Drivers'"
-        :class="['px-6 py-2 rounded-lg font-bold text-sm transition duration-500', 
-        activeTab === 'Drivers' ? 'bg-white text-(--gray-800)' : 'text-white hover:text-(--gray-500)']"
+      <button
+        @click="activeTab = 'transporter'"
+        :class="[
+          'px-6 py-2 rounded-lg font-bold text-sm transition duration-500',
+          activeTab === 'transporter'
+            ? 'bg-white text-gray-800'
+            : 'text-white hover:text-gray-400',
+        ]"
       >
         Drivers
       </button>
 
-      <!-- Only show if we are on Drivers tab -->
-      <button 
-        v-if="activeTab === 'Drivers'"
+      <button
+        v-if="activeTab === 'transporter'"
         @click="openCreateModal"
         class="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-gray-900"
       >
@@ -36,172 +39,384 @@
       </button>
     </div>
 
-    <!-- REUSABLE TABLE COMPONENT -->
-    <!-- We pass the filtered list into the table -->
-    <ShareUserTable 
-      :users="filteredList" 
-      @view="openEditModal" 
-      @edit=""
-      @ban="banUser"
-    />
+    <!-- USERS TABLE -->
+    <div
+      class="w-full h-full overflow-x-auto mt-8 border border-gray-300 rounded-lg overflow-hidden"
+    >
+      <table class="w-full border-collapse text-fixed">
+        <!-- Table Header -->
+        <thead class="bg-gray-200 border-b border-gray-300">
+          <tr>
+            <th class="p-4 text-left font-bold text-gray-800">User ID</th>
+            <th class="p-4 text-left font-bold text-gray-800">User Info</th>
+            <th class="p-4 text-left font-bold text-gray-800">Status</th>
+            <th class="p-4 text-left font-bold text-gray-800">Phone</th>
+            <th class="p-4 text-left font-bold text-gray-800">Action</th>
+          </tr>
+        </thead>
 
-    <!-- REUSABLE MODAL COMPONENT -->
-    <!-- It sits here, hidden, until showModal becomes true -->
-    <ShareUserProfileModal 
-      :isOpen="showModal" 
-      :user="selectedUser" 
-      :isCreating="isCreating"
-      @close="showModal = false"
-      @save="handleSave"
-    />
+        <!-- Table Body -->
+        <tbody class="divide-y divide-gray-200 bg-white">
+          <tr
+            v-for="user in filteredList"
+            :key="user.id"
+            class="hover:bg-gray-100 transition duration-300"
+          >
+            <td class="p-4 text-gray-800">{{ user.id }}</td>
+            <td class="p-4 text-gray-800 font-bold">
+              {{ user.firstname }} {{ user.lastname }}
+            </td>
+            <td class="p-4">
+              <span
+                :class="[
+                  'px-2 py-1 rounded-full text-xs font-bold border',
+                  user.status.toLowerCase() === 'active'
+                    ? 'bg-green-50 text-green-700 border-green-200'
+                    : user.status.toLowerCase() === 'banned'
+                    ? 'bg-red-50 text-red-700 border-red-200'
+                    : 'bg-gray-100 text-gray-600',
+                ]"
+              >
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="p-4 text-gray-800 font-bold">{{ user.email }}</td>
+            <td class="p-4 flex gap-2">
+              <button
+                @click="openEditModal(user)"
+                class="px-5 py-3 bg-blue-500 text-white text-xs font-bold rounded-lg hover:bg-blue-400"
+              >
+                View
+              </button>
+              <button
+                @click="banSelected(user)"
+                class="px-5 py-3 bg-red-500 text-white text-xs font-bold rounded-lg hover:bg-red-400"
+              >
+                Ban
+              </button>
+            </td>
+          </tr>
+          <tr v-if="filteredList.length === 0">
+            <td colspan="5" class="p-8 text-center text-gray-400">
+              No users found in this list.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- USER MODAL -->
+    <div
+      v-if="showModal"
+      class="fixed inset-0 z-50 flex justify-center items-center bg-black/60 backdrop-blur-xs"
+    >
+      <div class="bg-white rounded-xl w-full max-w-2xl overflow-hidden">
+        <!-- HEADER -->
+        <div
+          class="bg-gray-200 px-6 py-4 border-b flex justify-between items-center"
+        >
+          <div>
+            <p class="text-xl font-bold text-gray-800">
+              {{
+                isEditing
+                  ? isCreating
+                    ? "Add New User"
+                    : "Edit Profile"
+                  : "User Details"
+              }}
+            </p>
+            <p class="text-gray-800 uppercase">
+              {{ selectedUser.role }} Profile
+            </p>
+          </div>
+          <button
+            v-if="!isEditing"
+            @click="isEditing = true"
+            class="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+          >
+            Edit
+          </button>
+        </div>
+
+        <!-- BODY -->
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- AVATAR & NAME -->
+          <div
+            class="col-span-2 flex items-center gap-4 pb-4 border-b border-gray-600"
+          >
+            <img
+              src="https://via.placeholder.com/150"
+              class="w-32 h-32 rounded-full object-cover border-4 border-gray-500"
+            />
+            <div>
+              <p class="text-xl font-bold text-gray-800 mb-2">
+                {{ selectedUser.firstname }} {{ selectedUser.lastname }}
+              </p>
+              <span
+                class="text-sm bg-gray-100 border border-gray-700 px-2 py-1 rounded text-gray-800"
+              >
+                ID: {{ selectedUser.id }}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-800 uppercase mb-1"
+              >First Name</label
+            >
+            <input
+              v-model="selectedUser.firstname"
+              :disabled="!isEditing"
+              class="w-full p-3 rounded-lg border"
+            />
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-800 uppercase mb-1"
+              >Last Name</label
+            >
+            <input
+              v-model="selectedUser.lastname"
+              :disabled="!isEditing"
+              class="w-full p-3 rounded-lg border"
+            />
+          </div>
+            <div v-if="activeTab === 'transporter'">
+              <label class="block font-bold text-gray-800 uppercase mb-1"
+                >Plate Number</label
+              >
+              <input
+                v-model="selectedUser.license_plate"
+                :disabled="!isEditing"
+                class="w-full p-3 rounded-lg border"
+              />
+            </div>
+            <div v-if="activeTab === 'transporter'">
+              <label class="block font-bold text-gray-800 uppercase mb-1"
+                >Vehicle Type</label
+              >
+              <input
+                v-model="selectedUser.vehicle_type"
+                :disabled="!isEditing"
+                class="w-full p-3 rounded-lg border"
+              />
+            </div>
+            <div v-if="activeTab === 'transporter' && showinputpassword">
+              <label class="block font-bold text-gray-800 uppercase mb-1"
+                >password</label
+              >
+              <input
+                v-model="selectedUser.password"
+                :disabled="!isEditing"
+                class="w-full p-3 rounded-lg border"
+              />
+            </div>
+
+          <div class="col-span-2">
+            <label class="block font-bold text-gray-800 uppercase mb-1"
+              >Email</label
+            >
+            <input
+              v-model="selectedUser.email"
+              :disabled="!isEditing"
+              class="w-full p-3 rounded-lg border"
+            />
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="bg-gray-200 px-6 py-4 flex justify-end gap-3 border-t">
+          <button
+            v-if="isEditing"
+            @click="cancelEdit"
+            class="px-6 py-2 bg-white text-gray-800 rounded-lg font-bold hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+          <button
+            v-if="isEditing"
+            @click="saveSelected"
+            class="px-6 py-2 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 shadow-md"
+          >
+            Save Changes
+          </button>
+          <button
+            v-if="!isEditing"
+            @click="closeModal"
+            class="px-6 py-2 bg-white text-gray-800 rounded-lg font-bold hover:bg-gray-300"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import ShareUserProfileModal from '../../components/ShareUserProfileModal.vue'
-import ShareUserTable from '../../components/ShareUserTable.vue'
+import { ref, computed, watch, onMounted } from "vue";
+import { useUserStore } from "../../store/userstore";
+const userStore = useUserStore();
 
-// MOCK DATA (Simulating Backend)
-// We use 'reactive' so if we change data, the table updates automatically.
-const allUsers = reactive([
-  // CUSTOMERS
-  { 
-    id: 'C-1001', 
-    name: 'Sokha Dara', 
-    role: 'customer', 
-    status: 'Active', 
-    phone: '012 999 888', 
-    email: 'sokha@gmail.com', 
-    address: '#12, St 2004, Sen Sok, Phnom Penh' 
-  },
-  { 
-    id: 'C-1002', 
-    name: 'John Smith', 
-    role: 'customer', 
-    status: 'Banned', 
-    phone: '098 777 123', 
-    email: 'john@yahoo.com', 
-    address: 'Aeon Mall 1, Phnom Penh' 
-  },
-  
-  // DRIVERS
-  { 
-    id: 'D-5001', 
-    name: 'Vibol Chan', 
-    role: 'driver', 
-    status: 'Active', 
-    phone: '011 222 333', 
-    email: 'vibol.driver@movesmart.com', 
-    address: 'Kandal Province',
-    vehicleType: 'motorbike',
-    plateNumber: '1A-9988'
-  },
-  { 
-    id: 'D-5002', 
-    name: 'Chea Oudom', 
-    role: 'driver', 
-    status: 'Active', 
-    phone: '099 555 666', 
-    email: 'oudom.truck@movesmart.com', 
-    address: 'Takhmau City',
-    vehicleType: 'truck',
-    plateNumber: '3B-1234'
+const users = ref([]);
+onMounted(async () => {
+  if (activeTab.value === "user") {
+    const allUsers = await userStore.getallusers();
+    users.value = allUsers.users || allUsers || [];
+  } else if (activeTab.value === "transporter") {
+    const allTransporters = await userStore.getalltransporters();
+    users.value = allTransporters.transporters || allTransporters || [];
   }
-])
+});
 
+const activeTab = ref("user");
+const showModal = ref(false);
+const isCreating = ref(false);
+const isEditing = ref(false);
+const selectedUser = ref({});
+const showinputpassword = ref(false);
 
-// PAGE STATE
-const activeTab = ref('Customers') // Controls which tab is open (clicked)
-const showModal = ref(false)       // True = Show Pop-up, False = Hide Pop-up
-const selectedUser = ref(null)     // Stores the specific user we are looking at clicked by Admin
-const isCreating = ref(false)      // True = We are adding a NEW person. False = We are editing an OLD person.
-
-// OPEN FOR EDITING (existing user)
-const openEditModal = (user) => {
-  // Put the user data into our variable
-  selectedUser.value = user //  Load the clicked user's data
-  isCreating.value = false // We are NOT creating
-  showModal.value = true // Open the box
-}
-
-// OPEN FOR CREATING (New Logic)
-const openCreateModal = () => {
-  // We create a "Mock Empty Database Row" here
-  selectedUser.value = {
-    id: 'D-NEW', // Temporary ID
-    role: 'driver', // Force role to driver
-    status: 'Active',
-    name: '',
-    phone: '',
-    email: '',
-    vehicleType: 'motorbike', // Default
-    plateNumber: '',
-    address: ''
+watch(activeTab, async (newTab) => {
+  if (newTab === "user") {
+    const allUsers = await userStore.getallusers();
+    users.value = allUsers.users || allUsers || [];
+  } else if (newTab === "transporter") {
+    const allTransporters = await userStore.getalltransporters();
+    users.value = allTransporters.transporters || allTransporters || [];
+    console.log(users.value);
   }
-  
-  isCreating.value = true // We ARE creating (Flag is TRUE)
-  showModal.value = true // Open the box
-}
+});
 
-// COMPUTED PROPERTIES (Filter Logic)
-// This automatically updates the list based on the active tab
 const filteredList = computed(() => {
-  if (activeTab.value === 'Customers') {
-    return allUsers.filter(user => user.role === 'customer')
-  } else {
-    return allUsers.filter(user => user.role === 'driver')
-  }
-})
+  return users.value
+    .filter((u) =>
+      activeTab.value === "user" ? u.role === "user" : u.role === "transporter"
+    )
+    .sort((a, b) => a.id - b.id); // sort by id ascending
+});
 
-// THE SMART SAVE FUNCTION
-const handleSave = (userData) => {
-  if (isCreating.value) {
-    // === LOGIC FOR ADDING ===
-    console.log("Creating new user:", userData)
-    
-    // Generate a fake random ID for the frontend demo
-    userData.id = 'D-' + Math.floor(Math.random() * 1000)
-    
-    // Push to the array (Simulates saving to DB)
-    allUsers.push(userData)
-    
-  } else {
-    // === LOGIC FOR EDITING (EDITING EXISTING) ===
-    console.log("Updating existing user:", userData)
-    // Find where this user is in the array
-    const index = allUsers.findIndex(u => u.id === userData.id)
-    // Overwrite the old data with new data
-    if (index !== -1) allUsers[index] = userData
-  }
-  
-  showModal.value = false // Close modal
-  alert("Success!")
-}
+const openEditModal = (user) => {
+  selectedUser.value = { ...user };
+  showModal.value = true;
+  isEditing.value = false;
+  isCreating.value = false;
+};
 
-// Handle "Save" event from the Modal
-// const updateUser = (updatedData) => {
-//   console.log("Saving user:", updatedData)
-  
-  // Find the user in our mock list and update them
-//   const index = allUsers.findIndex(u => u.id === updatedData.id)
-//   if (index !== -1) {
-//     allUsers[index] = updatedData // This updates the Table instantly!
-//   }
-  
-//   showModal.value = false // Close modal
-//   alert("User Profile Updated Successfully!")
-// }
+const openCreateModal = () => {
+  selectedUser.value = {
+    id: '',
+    role: 'transporter',
+    status: 'Active',
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    license_plate: '',
+    vehicle_type: ''
+  };
+  showModal.value = true;
+  isEditing.value = true;
+  isCreating.value = true;
+  showinputpassword.value = true;
+};
 
-// Handle "Ban" event
-const banUser = (user) => {
-  if(confirm(`Are you sure you want to BAN ${user.name}?`)) {
-    const index = allUsers.findIndex(u => u.id === user.id)
-    if (index !== -1) {
-      allUsers[index].status = 'Banned' // Change status locally
+
+const saveSelected = async () => {
+  try {
+    if (isCreating.value) {
+      if (activeTab.value === 'user') {
+        // Local creation for demo
+        selectedUser.value.id = 'U-' + Math.floor(Math.random() * 1000);
+        users.value.push({ ...selectedUser.value });
+      } else if (activeTab.value === 'transporter') {
+        // Call API to register transporter
+        const res = await userStore.registerTransporter(
+          selectedUser.value.firstname,
+          selectedUser.value.lastname,
+          selectedUser.value.email,
+          selectedUser.value.password,
+          selectedUser.value.license_plate,
+          selectedUser.value.vehicle_type
+        );
+        if (res.success) {
+          showModal.value = false;      // ✅ close modal immediately
+          isCreating.value = false;
+          isEditing.value = false;
+
+          // Then refresh list
+          const transporters = await userStore.getalltransporters();
+          users.value = transporters;
+        } else {
+          console.error("Failed to register driver:", res.message);
+        }
+      }
+    } else {
+      // Edit existing user/driver
+      if (activeTab.value === 'user') {
+        const res = await userStore.updateUserProfile(
+          selectedUser.value.id,
+          selectedUser.value.firstname,
+          selectedUser.value.lastname,
+          selectedUser.value.email
+        );
+        if (res.success) {
+          const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
+          if (idx !== -1) users.value[idx] = { ...selectedUser.value };
+        }
+      } else if (activeTab.value === 'transporter') {
+        const res = await userStore.updateTransporterProfile(
+          selectedUser.value.id,
+          selectedUser.value.firstname,
+          selectedUser.value.lastname,
+          selectedUser.value.email,
+          selectedUser.value.license_plate,
+          selectedUser.value.vehicle_type
+        );
+        if (res.success) {
+          const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
+          if (idx !== -1) users.value[idx] = { ...selectedUser.value };
+        }
+      }
     }
+
+    showModal.value = false;
+    isEditing.value = false;
+    isCreating.value = false;
+  } catch (err) {
+    console.error("Error saving:", err);
   }
-}
+};
+
+
+const cancelEdit = () => {
+  if (isCreating.value) {
+    showModal.value = false;
+  }
+  isEditing.value = false;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  isEditing.value = false;
+};
+
+const banSelected = async (item) => {
+  try {
+    if (activeTab.value === "user") {
+      const res = await userStore.updateUserStatus(item.id, "banned");
+      if (res.success) {
+        const idx = users.value.findIndex((u) => u.id === item.id);
+        if (idx !== -1) users.value[idx].status = "banned";
+      }
+    } else if (activeTab.value === "transporter") {
+      const res = await userStore.updateTransporterStatus(item.id, "banned");
+      if (res.success) {
+        const idx = users.value.findIndex((u) => u.id === item.id);
+        if (idx !== -1) users.value[idx].status = "banned";
+      }
+    }
+  } catch (err) {
+    console.error("Error banning:", err);
+  }
+};
 </script>

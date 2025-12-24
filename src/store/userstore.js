@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { update } from 'lodash-es'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
@@ -8,7 +9,9 @@ export const useUserStore = defineStore('user', {
     user: null,
     error: null,
     success: null,
-    token: null
+    token: null,
+    users: [],
+    transporters: [],
   }),
 
   actions: {
@@ -80,11 +83,18 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async registerTransporter(data) {
+    async registerTransporter(firstname, lastname, email, password, license_plate, vehicle_type) {
       try {
         const res = await axios.post(
           `${API_URL}/transporter/registertransporter`,
-          data
+          {
+            firstname,
+            lastname,
+            email,
+            password,
+            license_plate,
+            vehicle_type
+          } 
         );
 
         this.success = res.data.message || "Transporter registered";
@@ -139,6 +149,96 @@ export const useUserStore = defineStore('user', {
         this.error = message;
         return null;
       }
-    } 
-  }
+    },
+    
+    async getallusers() {
+      try {
+        const res = await axios.get(`${API_URL}/auth/getalluser`);
+        this.users = res.data  
+        return res.data  
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to fetch users";
+        this.error = message;
+        return [];
+      }
+    },
+
+    async updateUserStatus(userId, status) {  // ✅ move it here
+      try {
+        const res = await axios.patch(`${API_URL}/auth/updatestatus/${userId}`, {
+          status: status
+        });
+        this.success = res.data.message || "User status updated successfully";
+        this.error = null;
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to update user status";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+
+    async updateUserProfile(userId, firstname, lastname, email) {  // ✅ move it here
+      try {
+        const res = await axios.patch(`${API_URL}/auth/updateprofile/${userId}`, {
+          firstname,
+          lastname,
+          email
+        });
+        this.success = res.data.message || "User profile updated successfully";
+        this.error = null;
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to update user profile";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+
+    async getalltransporters() {
+      try {
+        const res = await axios.get(`${API_URL}/transporter/getalltransporter`);
+        this.transporters = res.data;
+        return res.data;
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to fetch transporters";
+        this.error = message;
+        return [];
+      }
+    },
+
+    async updateTransporterStatus(transporterId, status) {
+      try {
+        const res = await axios.patch(`${API_URL}/transporter/updatetransporterstatus/${transporterId}`, {
+          status: status
+        });
+        this.success = res.data.message || "Transporter status updated successfully";
+        this.error = null;
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to update transporter status";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+
+    async updateTransporterProfile(transporterId, firstname, lastname, email, license_plate, vehicle_type) {
+      try {
+        const res = await axios.patch(`${API_URL}/transporter/updatetransporterprofile/${transporterId}`, {
+          firstname,
+          lastname,
+          email,
+          license_plate,
+          vehicle_type,
+        });
+        this.success = res.data.message || "Transporter profile updated successfully";
+        this.error = null;
+        return { success: true, message: this.success };
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to update transporter profile";
+        this.error = message;
+        return { success: false, message };
+      }
+    },
+  },
 })
