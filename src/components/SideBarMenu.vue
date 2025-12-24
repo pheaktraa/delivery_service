@@ -35,7 +35,9 @@
 
     <!-- LOGOUT -->
     <div class=" w-full mt-[1rem] pt-4 border-t-3 border-white">
-      <button @click="logout" class="text-lg w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white hover:text-red-700 transition duration-200">
+      <button
+        @click="logout"
+        class="text-lg w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white hover:text-red-700 transition duration-200">
         <span class="w-[1.5rem] h-[1rem] flex items-center justify-center">
           <img 
             src="../assets/icon/logout2.svg" 

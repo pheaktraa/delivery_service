@@ -23,15 +23,9 @@
       <div class="grid grid-cols-1 lg:grid-cols-2">
         
         <!-- LEFT COLUMN: MAP -->
-        <div class="h-[400px] lg:h-auto relative">
-          <!-- Real Embedded Map -->
-          <iframe 
-             :src="mapUrl" 
-             width="100%" 
-             height="100%" 
-             style="border:0;" 
-             loading="lazy">
-          </iframe>
+        <div class="h-[400px] lg:h-full lg:min-h-[600px] relative bg-gray-100">
+          <!-- Actual Map Container -->
+          <div ref="mapDiv" class="w-full h-full"></div>
         </div>
 
         <!-- RIGHT COLUMN: DETAILS -->
@@ -98,27 +92,101 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useCreateDeliveryStore from '../../store/createDelivery'
+import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
 
 const route = useRoute()
 const router = useRouter()
 const deliveryStore = useCreateDeliveryStore()
 const order = ref({})
+
+// 1. Define the key from your .env file
+const myApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+// 2. Set Options (Using the variable we just defined)
+setOptions({
+  apiKey: myApiKey, 
+  version: "weekly",
+});
+
+// 3. Google Maps Setup
+const mapDiv = ref(null) // Ref for the HTML element
+let map = null
+let directionsService = null
+let directionsRenderer = null
+
 const orderId = Number(route.params.id);
 console.log("delivered_id", orderId);
 
 onMounted(async () => {
+  // DEBUGGING: This will tell us if Vite can see your file
+  console.log("CHECK 1: Env Object:", import.meta.env)
+  console.log("CHECK 2: API Key value:", myApiKey)
+
+  if (!myApiKey) {
+    console.error("CRITICAL ERROR: API Key is missing! Check your .env file name and content.")
+    return
+  }
+
   try {
     const data = await deliveryStore.getDeliveryById(orderId)
     order.value = data.delivery
-    console.log('Loaded delivery:', order.value)
+    initMap()
   } catch (err) {
     console.error('Failed to load delivery', err)
-    router.back()
   }
 })
+
+const initMap = async () => {
+  const { Map } = await importLibrary("maps")
+  const { DirectionsService, DirectionsRenderer } = await importLibrary("routes")
+
+  map = new Map(mapDiv.value, {
+    center: { lat: 11.5564, lng: 104.9282 }, 
+    zoom: 13,
+    disableDefaultUI: true,
+  })
+
+  directionsService = new DirectionsService()
+  directionsRenderer = new DirectionsRenderer({
+    map: map,
+    polylineOptions: { strokeColor: "#EF4444", strokeWeight: 5 }
+  })
+
+  calculateAndDisplayRoute()
+}
+
+// ROUTE CALCULATION LOGIC
+const calculateAndDisplayRoute = () => {
+  // Use coordinates instead of text addresses
+  if (!order.value.pickup_lat || !order.value.destination_lat) {
+    console.warn("Using text address as fallback...");
+    // fallback to text if coordinates are missing
+    var origin = order.value.pick_up_address;
+    var destination = order.value.destination_address;
+  } else {
+    // Use the precise coordinates!
+    var origin = { lat: order.value.pickup_lat, lng: order.value.pickup_lng };
+    var destination = { lat: order.value.destination_lat, lng: order.value.destination_lng };
+  }
+
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: "DRIVING",
+  }, (response, status) => {
+    if (status === "OK") {
+      directionsRenderer.setDirections(response);
+    }
+  });
+};
+
+// Watch for address changes (optional but good practice)
+watch(() => order.value, () => {
+  if (map) calculateAndDisplayRoute()
+}, { deep: true })
 
 const currentStep = ref(0) 
 
@@ -169,10 +237,7 @@ const handleMainAction = async () => {
   }
 }
 
-
-
-
-// 5. BUTTON TEXT LOGIC
+// BUTTON TEXT LOGIC
 const buttonText = computed(() => {
   switch(currentStep.value) {
     case 0: return 'Accept Job'
