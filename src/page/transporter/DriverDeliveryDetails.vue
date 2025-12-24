@@ -122,8 +122,8 @@ console.log("delivered_id", orderId);
 
 onMounted(async () => {
   // DEBUGGING: This will tell us if Vite can see your file
-  console.log("CHECK 1: Env Object:", import.meta.env)
-  console.log("CHECK 2: API Key value:", myApiKey)
+  // console.log("CHECK 1: Env Object:", import.meta.env)
+  // console.log("CHECK 2: API Key value:", myApiKey)
 
   if (!myApiKey) {
     console.error("CRITICAL ERROR: API Key is missing! Check your .env file name and content.")
