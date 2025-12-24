@@ -6,7 +6,7 @@ import RadialBarCircle from '../../components/RadialBarCircle.vue';
 
 <template>
     <!-- CONTAINER -->
-    <div class="p-8 max-w-6xl mx-auto mt-[5rem] bg-gray-200">
+    <div class="p-8 max-w-6xl min-h-screen mx-auto bg-gray-200">
 
         <!-- PAGE HEADER -->
         <div class="">

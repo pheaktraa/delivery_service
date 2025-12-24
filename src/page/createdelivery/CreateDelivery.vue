@@ -21,10 +21,13 @@
               <label for="pickupAddress" class="font-semibold mb-2"
                 >Pickup Address</label
               >
+              <!-- Pickup Address -->
               <input
+                ref="pickupInput" 
                 type="text"
                 id="pickupAddress"
                 v-model="deliveryData.pick_up_address"
+                placeholder="Search for pickup location..."
                 class="p-3 rounded-lg border-(--gray-300) border-2 focus:outline-none focus:border-(--red-800) bg-white"
               />
             </div>
@@ -43,10 +46,13 @@
               <label for="deliveryAddress" class="font-semibold mb-2"
                 >Delivery Address</label
               >
+              <!-- Delivery Address -->
               <input
+                ref="deliveryInput" 
                 type="text"
                 id="deliveryAddress"
                 v-model="deliveryData.destination_address"
+                placeholder="Search for destination..."
                 class="p-3 rounded-lg border-(--gray-300) border-2 focus:outline-none focus:border-(--red-800) bg-white"
               />
             </div>
@@ -237,16 +243,25 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useCreateDeliveryStore from "../../store/createDelivery";
+import { setupAutocomplete } from "../../utils/googleMaps";
+
 
 const router = useRouter();
 const createDeliveryStore = useCreateDeliveryStore();
 const showMessage = ref(false)
 
+const pickupInput = ref(null);
+const deliveryInput = ref(null);
+
 const deliveryData = ref({
   pick_up_address: "",
+  pickup_lat: null,
+  pickup_lng: null,
+  destination_lat: null,
+  destination_lng: null,
   receiver_name: "",
   destination_address: "",
   receiver_contact: "",
@@ -256,6 +271,28 @@ const deliveryData = ref({
   type_of_delivery: "",
   payment_type: "",
   total_amount: 0,
+});
+
+// Initialize Google Maps Autocomplete
+onMounted(async () => {
+  // Setup Pickup
+  await setupAutocomplete(pickupInput.value, (data) => {
+    deliveryData.value.pick_up_address = data.address;
+    deliveryData.value.pickup_lat = data.lat;
+    deliveryData.value.pickup_lng = data.lng;
+    
+    // Check your console when you click a suggestion!
+    console.log("Captured Pickup Coordinates:", data.lat, data.lng);
+  });
+
+  // Setup Destination
+  await setupAutocomplete(deliveryInput.value, (data) => {
+    deliveryData.value.destination_address = data.address;
+    deliveryData.value.destination_lat = data.lat;
+    deliveryData.value.destination_lng = data.lng;
+    
+    console.log("Captured Destination Coordinates:", data.lat, data.lng);
+  });
 });
 
 const selectedPayment = ref("");
@@ -308,6 +345,15 @@ async function handleCreateDelivery() {
   // clear old messages
   createDeliveryStore.error = null;
   createDeliveryStore.success = null;
+
+  // Add coordinate check to your validation
+  if (!values.pickup_lat || !values.destination_lat) {
+    createDeliveryStore.error = "Please select addresses from the suggestions dropdown";
+    showMessage.value = true;
+    return;
+  }
+
+  console.log("DATA BEING SENT TO STORE:", JSON.stringify(values, null, 2));
 
   // --- API REQUEST ---
   const res = await createDeliveryStore.createDelivery(values);

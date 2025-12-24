@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto page">
-    <div class="mt-[2rem] bg-(--gray-100) p-[2rem] rounded-lg sd">
+  <div class="p-8 max-w-6xl min-h-screen mx-auto bg-(--gray-100)">
+    <div class="">
     
     <!-- PAGE TITLE -->
-    <div class="border-b-[2px] border-(--gray-300) pt-[2rem] pb-[2rem]">
+    <div class="border-b-[2px] border-(--gray-300) pb-[1rem]">
         <p class="text-(--red-800) text-[length:var(--text-title)] font-bold">
           User Management
         </p>
