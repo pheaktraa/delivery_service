@@ -202,7 +202,7 @@
                   class="w-full p-3 rounded-lg border"
                 />
               </div>
-              <div v-if="activeTab === 'transporter' && showinputpassword">
+              <div v-if="showinputpassword" class="col-span-2">
                 <label class="block font-bold text-gray-800 uppercase mb-1"
                   >password</label
                 >
@@ -212,6 +212,27 @@
                   class="w-full p-3 rounded-lg border"
                 />
               </div>
+
+              <div v-if="showinputpassword" class="hidden">
+                <label class="block font-bold text-gray-800 uppercase mb-1"
+                  >Status</label
+                >
+                <input
+                  v-model="selectedUser.status"
+                  :disabled="!isEditing"
+                  class="w-full p-3 rounded-lg border"
+                />
+              </div>
+              <div class="col-span-2" v-else>
+                <label class="block font-bold text-gray-800 uppercase mb-1"
+                >Status</label
+                >
+                <input
+                v-model="selectedUser.status"
+                :disabled="!isEditing"
+                class="w-full p-3 rounded-lg border"
+                />
+            </div>
 
             <div class="col-span-2">
               <label class="block font-bold text-gray-800 uppercase mb-1"
@@ -252,6 +273,18 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <div
+        v-if="showMessage"
+        class="fixed top-1/12 left-10/12 -translate-x-1/2 w-[16rem] py-3 px-4 text-center rounded-lg z-2"
+        :class="
+          userStore.error ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+        "
+      >
+        <p v-if="userStore.error">{{ userStore.error }}</p>
+        <p v-else>{{ userStore.success }}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -261,6 +294,7 @@ import { useUserStore } from "../../store/userstore";
 const userStore = useUserStore();
 
 const users = ref([]);
+const showMessage = ref(false);
 onMounted(async () => {
   if (activeTab.value === "user") {
     const allUsers = await userStore.getallusers();
@@ -302,6 +336,7 @@ const openEditModal = (user) => {
   showModal.value = true;
   isEditing.value = false;
   isCreating.value = false;
+  showinputpassword.value = false;
 };
 
 const openCreateModal = () => {
@@ -340,6 +375,8 @@ const saveSelected = async () => {
           selectedUser.value.license_plate,
           selectedUser.value.vehicle_type
         );
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2500);
         if (res.success) {
           showModal.value = false;      // ✅ close modal immediately
           isCreating.value = false;
@@ -348,6 +385,9 @@ const saveSelected = async () => {
           // Then refresh list
           const transporters = await userStore.getalltransporters();
           users.value = transporters;
+
+          showMessage.value = true;
+          setTimeout(() => (showMessage.value = false), 2500);
         } else {
           console.error("Failed to register driver:", res.message);
         }
@@ -364,6 +404,9 @@ const saveSelected = async () => {
         if (res.success) {
           const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
           if (idx !== -1) users.value[idx] = { ...selectedUser.value };
+
+          showMessage.value = true;
+          setTimeout(() => (showMessage.value = false), 2500);
         }
       } else if (activeTab.value === 'transporter') {
         const res = await userStore.updateTransporterProfile(
@@ -377,6 +420,8 @@ const saveSelected = async () => {
         if (res.success) {
           const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
           if (idx !== -1) users.value[idx] = { ...selectedUser.value };
+          showMessage.value = true;
+          setTimeout(() => (showMessage.value = false), 2500);
         }
       }
     }
@@ -384,6 +429,9 @@ const saveSelected = async () => {
     showModal.value = false;
     isEditing.value = false;
     isCreating.value = false;
+
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2000);
   } catch (err) {
     console.error("Error saving:", err);
   }
@@ -409,12 +457,16 @@ const banSelected = async (item) => {
       if (res.success) {
         const idx = users.value.findIndex((u) => u.id === item.id);
         if (idx !== -1) users.value[idx].status = "banned";
+          showMessage.value = true;
+          setTimeout(() => (showMessage.value = false), 2000);
       }
     } else if (activeTab.value === "transporter") {
       const res = await userStore.updateTransporterStatus(item.id, "banned");
       if (res.success) {
         const idx = users.value.findIndex((u) => u.id === item.id);
         if (idx !== -1) users.value[idx].status = "banned";
+          showMessage.value = true;
+          setTimeout(() => (showMessage.value = false), 2000);
       }
     }
   } catch (err) {
