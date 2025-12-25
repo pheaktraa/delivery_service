@@ -64,7 +64,7 @@
 
               <!-- Price -->
               <td class="p-4 text-(--gray-800) font-bold">
-                ${{ delivery.total_amount }} riel
+                ${{ delivery.total_amount }} 
               </td>
 
               <!-- Date -->

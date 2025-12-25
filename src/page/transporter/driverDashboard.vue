@@ -28,8 +28,8 @@
                     </div>
                     <!-- TEXT INFO -->
                     <div class="">
-                        <p class="text-[2rem] font-bold">{{ getdata.length }}</p>
-                        <p class="font-bold">Total Earnings</p>
+                        <p class="text-[2rem] font-bold">${{ stats.total_earnings }}</p>
+                        <p class="font-bold">Total Earnings (80%)</p>
                     </div>
                 </div>
                 <!-- BOX CONTAINER -->
@@ -45,7 +45,7 @@
                     </div>
                     <!-- TEXT INFO -->
                     <div>
-                        <p class="text-[2rem] font-bold">{{ getdata.length }}</p>
+                        <p class="text-[2rem] font-bold">{{ stats.total_delivered }}</p>
                         <p class="font-bold">Total Delivered</p>
                     </div>
                 </div>
@@ -108,9 +108,23 @@ const createDeliveryStore = useCreateDeliveryStore()
 
 const getdata = ref([])
 
+// Add a ref to hold the stats
+const stats = ref({
+    total_delivered: 0,
+    total_earnings: "0.00"
+})
+
 onMounted(async () => {
+    // Fetch the list (for the table)
     const data = await createDeliveryStore.getTransporterDeliveries()
     getdata.value = data
+
+    // Fetch the summary stats (for the boxes)
+    const statsData = await createDeliveryStore.getDriverStats()
+    if (statsData.success) {
+        stats.value = statsData
+    }
+
     console.log("Driver Deliveries:", getdata.value)
 })  
 

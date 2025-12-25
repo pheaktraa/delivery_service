@@ -26,6 +26,12 @@
           <div class="border border-(--gray-300) rounded-lg overflow-hidden bg-gray-50 h-[450px] relative">
             <!-- The actual Map -->
             <div ref="mapDiv" class="w-full h-full"></div>
+
+            <!-- FLOATING DISTANCE BADGE -->
+            <div v-if="item.distance" class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg shadow-md border border-gray-200 z-10">
+              <p class="text-xs font-bold text-gray-500 uppercase">Total Distance</p>
+              <p class="text-lg font-bold text-(--red-800)">{{ Number(item.distance).toFixed(2) }} km</p>
+            </div>
             
             <!-- Overlay for when there is no data -->
             <div v-if="!item" class="absolute inset-0 flex items-center justify-center text-gray-400">
@@ -92,6 +98,11 @@
               class="flex flex-col gap-2 border-b-[2px] border-(--gray-300) pb-2"
             >
               <p><strong>Price:</strong> ${{ item.total_amount }}</p>
+
+              <p v-if="item.distance">
+                <strong>Distance:</strong> {{ Number(item.distance).toFixed(2) }} km
+              </p>
+
               <p><strong>Pickup Address:</strong> {{ item.pick_up_address }}</p>
               <p>
                 <strong>Destination Address:</strong>
