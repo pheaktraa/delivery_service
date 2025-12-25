@@ -17,8 +17,8 @@
         <li v-for="item in currentMenu" :key="item.path">
           <router-link 
             :to="item.path" 
-            class="flex items-center gap-2 px-4 py-3 transition duration-200 font-bold text-white hover:bg-(--gray-100) hover:text-red-700"
-            :class="{ 'bg-white text-red-700 font-bold': route.path === item.path }"
+            class="flex items-center gap-2 px-4 py-3 transition duration-200 font-bold text-white hover:bg-(--gray-100) border-white rounded-lg hover:text-red-700"
+            :class="{ 'bg-white border-0 border-white rounded-lg text-red-700 font-bold': route.path === item.path }"
           >
             <!-- Icon -->
             <span class="w-[1.5rem] h-[1rem] flex items-center justify-center">
@@ -37,7 +37,7 @@
     <div class=" w-full mt-[1rem] pt-4 border-t-3 border-white">
       <button
         @click="logout"
-        class="text-lg w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white hover:text-red-700 transition duration-200">
+        class="text-lg w-full flex items-center gap-4 px-4 py-3 text-white font-bold hover:bg-white border-white rounded-lg hover:text-red-700 transition duration-200">
         <span class="w-[1.5rem] h-[1rem] flex items-center justify-center">
           <img 
             src="../assets/icon/logout2.svg" 

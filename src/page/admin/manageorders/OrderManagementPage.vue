@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto page">
-    <div class="mt-[2rem] bg-(--gray-100) p-[2rem] rounded-lg sd">
+  <div class="max-w-[80rem] h-full m-auto px-[5rem]">
+    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd">
       <div>
         <p class="text-[length:var(--text-title)] font-extrabold">Order Management</p>
       </div>
@@ -118,14 +118,17 @@ const router = useRouter();
 const storedelivery = useCreateDeliveryStore();
 const getdata = ref([])
 
+
+
 onMounted(async () => {
-  const result = await storedelivery.getdeliverybyuser();
-  getdata.value = result;
+  const result = await storedelivery.getalldelivery();
+  getdata.value = result.deliveries.data;
 })
 
 const selectedStatus = ref('all');
 
 const filteredDeliveries = computed(() => {
+  // if (!getdata.value) return [];
   if (selectedStatus.value === 'all') return getdata.value;
 
   return getdata.value.filter(item => 
