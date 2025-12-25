@@ -169,7 +169,7 @@
             <div class="flex flex-col">
               <label class="font-semibold mb-2">Payment Method</label>
               <div class="flex gap-3">
-                <button
+                <!-- <button
                   type="button"
                   class="payment-btn flex-1 p-3 border-2 rounded-lg border-[var(--gray-300)] hover:bg-[var(--red-800)] transition-colors duration-300 hover:text-white"
                   @click="selectPayment('cash')"
@@ -180,7 +180,7 @@
                   "
                 >
                   Cash on Delivery
-                </button>
+                </button> -->
 
                 <button
                   type="button"
