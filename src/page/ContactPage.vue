@@ -22,7 +22,7 @@
       <div class="w-full md:w-[60%] flex flex-col justify-center items-center text-center md:text-left">
         <p class="mb-[1rem] text-[2rem] md:text-[2.5rem] text-(--gray-100) font-bold">Have Some Question?</p>
         <p class="text-[0.85rem] md:text-[1rem] text-(--gray-100)">Thank you for interest in our services. Please Write us a message or email us at 
-          <span class="font-semibold text-(--red-400)">lebron@email.com</span> about your issue and we’ll try to reach back as soon as possible.</p>
+          <span class="font-semibold text-(--red-400)">admin@gmail.com</span> about your issue and we’ll try to reach back as soon as possible.</p>
       </div>
     </div>
 
@@ -49,7 +49,7 @@
           <p class="text-(--gray-800) font-semibold">+855-123-456-789</p>
         </div>
 
-        <div class="w-full md:w-[85%] flex flex-row justify-start md:justify-center items-center gap-3 md:relative md:top-[-5rem] mb-[1rem]">
+        <div class="w-full md:w-[85%] flex flex-row justify-start md:justify-center items-center gap-5 md:relative md:top-[-5rem] mb-[1rem]">
           <div class="w-[3rem] h-[3rem] flex justify-center items-center bg-white border border-(--gray-500) rounded-[50%]">
             <img 
               src="../assets/icon/mail.svg"
@@ -57,7 +57,7 @@
               class="w-[1.8rem] h-[1.8rem]"
             />
           </div>
-          <p class="text-(--gray-800) font-semibold">lebron@gmail.com</p>
+          <p class="text-(--gray-800) font-semibold">admin@gmail.com</p>
         </div>
 
         <div class="w-full md:w-[85%] flex flex-row justify-start md:justify-center items-center gap-3 md:relative md:top-[-5rem] mb-[1rem]">
@@ -107,7 +107,7 @@
             name="message"
             v-model="formData.message" required
             placeholder="Message"
-            class="w-full h-[10rem] md:h-[12rem] md:h-[12rem] placeholder:text-(--gray-500) mt-[1rem] md:mt-[1.5rem] p-[0.75rem] md:p-[1rem] bg-(--gray-100) border border-(--gray-400) rounded-lg focus:outline-none focus:ring-1 focus:ring-(--gray-500)"
+            class="w-full h-[10rem] md:h-[12rem] placeholder:text-(--gray-500) mt-[1rem] md:mt-[1.5rem] p-[0.75rem] md:p-[1rem] bg-(--gray-100) border border-(--gray-400) rounded-lg focus:outline-none focus:ring-1 focus:ring-(--gray-500)"
           ></textarea>
 
           <div class="mt-[1.25rem] md:mt-[2rem]">
