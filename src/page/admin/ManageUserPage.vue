@@ -7,7 +7,7 @@
       </div>
 
       <!-- TABS -->
-      <div class="flex gap-2 bg-gray-700 p-1.5 rounded-xl w-fit mt-6">
+      <div class="flex gap-2 bg-(--gray-700) p-1.5 rounded-xl w-fit mt-6">
         <button
           @click="activeTab = 'user'"
           :class="[

@@ -26,15 +26,15 @@
 
       <div class="w-full h-full overflow-x-auto mb-[1rem] border border-(--gray-300) rounded-lg">
         <table class="w-full border-collapse text-fixed">
-          <thead class="bg-(--gray-100) border-b border-(--gray-300)">
+          <thead class="bg-gray-200 border-b border-(--gray-300)">
 
-            <tr class="bg-(--gray-700)">
-              <th class="p-4 text-left text-(--gray-100) font-bold">Order ID</th>
-              <th class="p-4 text-left text-(--gray-100) font-bold">Customer Name</th>
-              <th class="p-4 text-left text-(--gray-100) font-bold">Item</th>
-              <th class="p-4 text-left text-(--gray-100) font-bold">Status</th>
-              <th class="p-4 text-left text-(--gray-100) font-bold">Delivery Type</th>
-              <th class="p-4 text-left text-(--gray-100) font-bold"></th>
+            <tr class="bg-gray-200">
+              <th class="p-4 text-left text-gray-800 font-bold">Order ID</th>
+              <th class="p-4 text-left text-gray-800 font-bold">Customer Name</th>
+              <th class="p-4 text-left text-gray-800 font-bold">Item</th>
+              <th class="p-4 text-left text-gray-800 font-bold">Status</th>
+              <th class="p-4 text-left text-gray-800 font-bold">Delivery Type</th>
+              <th class="p-4 text-left text-gray-800 font-bold"></th>
             </tr>
           </thead>
 
@@ -42,7 +42,7 @@
             <tr 
               v-for="delivery in filteredDeliveries"
               :key="delivery.id"
-              class="hover:bg-(--gray-100) transition duration-300"
+              class="hover:bg-(--gray-100) transition duration-300 font-bold"
             >
 
             <!-- Delivery ID -->

@@ -29,7 +29,6 @@
                     <!-- The Image -->
                     <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcTERIELXWC3QMfy-g_rUnG_HAplsff-mSoWU73ZBqKkrgQ2IhbPMnc0bn-57o4-fVM1frgbgj6YEfnCto4"
                         class="w-32 h-32 rounded-full object-cover border-4 border-(--gray-500)">
-                    </img>
                     <div>
                         <p class="text-[1.5rem] font-bold text-(--gray-800) mb-[1rem]">{{ formData.name }}</p>
                         <span
