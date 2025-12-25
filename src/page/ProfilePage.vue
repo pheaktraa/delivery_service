@@ -11,7 +11,6 @@
             <img :src="getImage(user?.avatar)"
                  alt=""
                 class="w-50 h-50 rounded-full object-cover border-4 border-(--gray-500)">
-            </img>
             <div class="flex items-center">
               <p class="text-[length:var(--text-title)] font-bold text-(--gray-800) mb-[1rem]">
                 {{ user?.username }}</p>

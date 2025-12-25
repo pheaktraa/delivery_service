@@ -17,28 +17,24 @@
             placeholder="Firstname"
             class="input text-gray-500"
             v-model="registerData.firstname"
-            required
           />
           <input
             type="text"
             placeholder="Lastname"
             class="input text-gray-500"
             v-model="registerData.lastname"
-            required
           />
           <input
             type="email"
             placeholder="Email"
             class="input text-gray-500"
             v-model="registerData.email"
-            required
           />
           <input
             :type="showPassword ? 'text' : 'password'"
             placeholder="Password"
             class="input text-gray-500"
             v-model="registerData.password"
-            required
           />
           <button
             type="button"
@@ -49,12 +45,6 @@
           </button>
           <button
             class="button mt-2"
-            :disabled="
-              !registerData.firstname ||
-              !registerData.lastname ||
-              !registerData.email ||
-              !registerData.password
-            "
           >
             Sign Up
           </button>
@@ -77,7 +67,6 @@
             placeholder="Email"
             v-model="logindata.email"
             class="input text-gray-500"
-            required
           />
 
           <input
@@ -85,7 +74,6 @@
             class="input text-gray-500"
             :type="showPassword ? 'text' : 'password'"
             v-model="logindata.password"
-            required
           />
           <button
             type="button"
@@ -98,7 +86,6 @@
           <a href="#" class="span my-3">Forgot your password?</a>
           <button
             class="button"
-            :disabled="!logindata.email || !logindata.password"
           >
             Sign In
           </button>
@@ -136,8 +123,8 @@
           userStore.error ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
         "
       >
-        <p v-if="userStore.error">{{ userStore.error }}</p>
-        <p v-else>{{ userStore.success }}</p>
+        <p v-if="userStore.success">{{ userStore.success }}</p>
+        <p v-else>{{ userStore.error }}</p>
       </div>
     </transition>
   </div>
@@ -174,20 +161,24 @@ const activateSignIn = () => (isRightPanelActive.value = false);
 
 // Login
 async function handleLogin() {
-  if (!logindata.value.email || !logindata.value.password) {
-    alert("Please fill all fields");
-    return;
-  }
+  // if (!logindata.value.email || !logindata.value.password) {
+  //   alert("Please fill all fields");
+  //   return;
+  // }
   let res;
 
   if (logindata.value.role === "transporter") {
     res = await userStore.loginTransporter(logindata.value);
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
   } else {
     res = await userStore.login(logindata.value);
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
   }
 
-  showMessage.value = true;
-  setTimeout(() => (showMessage.value = false), 1500);
+  // showMessage.value = true;
+  // setTimeout(() => (showMessage.value = false), 1500);
 
   if (res.success) {
     showMessage.value = true;
@@ -201,7 +192,10 @@ async function handleLogin() {
     
     setTimeout(() => {
       router.push(roleRedirect[logindata.value.role] || "/home");
-    }, 1500);
+    }, 2500);
+  }else {
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
   }
 }
 
@@ -209,22 +203,22 @@ async function handleLogin() {
 async function handleRegister() {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (
-    !registerData.value.firstname ||
-    !registerData.value.lastname ||
-    !registerData.value.email ||
-    !registerData.value.password
-  ) {
-    showMessage.value = true;
-    userStore.error = "Please fill all fields";
-    setTimeout(() => (showMessage.value = false), 1500);
-    return;
-  }
+  // if (
+  //   !registerData.value.firstname ||
+  //   !registerData.value.lastname ||
+  //   !registerData.value.email ||
+  //   !registerData.value.password
+  // ) {
+  //   showMessage.value = true;
+  //   userStore.error = "Please fill all fields";
+  //   setTimeout(() => (showMessage.value = false), 1500);
+  //   return;
+  // }
 
-  if (!emailPattern.test(registerData.value.email)) {
-    alert("Please enter a valid email address");
-    return;
-  }
+  // if (!emailPattern.test(registerData.value.email)) {
+  //   alert("Please enter a valid email address");
+  //   return;
+  // }
 
   const res = await userStore.register(registerData.value);
 
@@ -233,6 +227,11 @@ async function handleRegister() {
 
   if (res.success) {
     activateSignIn();
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 1500);
+  }else {
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 1500);  
   }
 }
 </script>
