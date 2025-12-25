@@ -160,18 +160,19 @@ const initMap = async () => {
 
 // ROUTE CALCULATION LOGIC
 const calculateAndDisplayRoute = () => {
-  // Use coordinates instead of text addresses
-  if (!order.value.pickup_lat || !order.value.destination_lat) {
-    console.warn("Using text address as fallback...");
-    // fallback to text if coordinates are missing
-    var origin = order.value.pick_up_address;
-    var destination = order.value.destination_address;
-  } else {
-    // Use the precise coordinates!
-    var origin = { lat: order.value.pickup_lat, lng: order.value.pickup_lng };
-    var destination = { lat: order.value.destination_lat, lng: order.value.destination_lng };
-  }
+  // 1. Ensure we have both coordinates and convert them to Numbers just in case
+  const origin = (order.value.pickup_lat && order.value.pickup_lng) 
+    ? { lat: Number(order.value.pickup_lat), lng: Number(order.value.pickup_lng) } 
+    : order.value.pick_up_address;
 
+  const destination = (order.value.destination_lat && order.value.destination_lng) 
+    ? { lat: Number(order.value.destination_lat), lng: Number(order.value.destination_lng) } 
+    : order.value.destination_address;
+
+  // 2. Stop if data is totally missing
+  if (!origin || !destination) return;
+
+  // 3. Request the route
   directionsService.route({
     origin: origin,
     destination: destination,
@@ -179,6 +180,8 @@ const calculateAndDisplayRoute = () => {
   }, (response, status) => {
     if (status === "OK") {
       directionsRenderer.setDirections(response);
+    } else {
+      console.error("Google Maps failed to find a route. Check addresses!");
     }
   });
 };
@@ -189,23 +192,6 @@ watch(() => order.value, () => {
 }, { deep: true })
 
 const currentStep = ref(0) 
-
-const mapUrl = computed(() => {
-  if (!order.value) return "";
-
-  const address =
-    currentStep.value <= 1
-      ? order.value.pick_up_address
-      : order.value.destination_address;
-
-  if (!address) return "";
-
-  return `https://www.google.com/maps/embed/v1/place?key=${
-    import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-  }&q=${encodeURIComponent(address)}`;
-});
-
-
 
 // 4. ACTION HANDLER
 const handleMainAction = async () => {

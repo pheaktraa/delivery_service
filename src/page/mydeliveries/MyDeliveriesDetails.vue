@@ -13,7 +13,7 @@
           v-if="item"
           class="w-full h-full grid grid-cols-2 gap-[2rem] p-[2rem] border-0 border-(--gray-300) rounded-lg bg-white"
         >
-          <div
+          <!-- <div
             class="border border-(--gray-300) rounded-lg p-[1rem] flex items-center justify-center"
           >
             <img
@@ -21,6 +21,16 @@
               alt=""
               class="w-[20rem] h-[20rem] object-cover"
             />
+          </div> -->
+          <!-- Replace your current image container with this -->
+          <div class="border border-(--gray-300) rounded-lg overflow-hidden bg-gray-50 h-[450px] relative">
+            <!-- The actual Map -->
+            <div ref="mapDiv" class="w-full h-full"></div>
+            
+            <!-- Overlay for when there is no data -->
+            <div v-if="!item" class="absolute inset-0 flex items-center justify-center text-gray-400">
+              No delivery data found.
+            </div>
           </div>
 
           <div class="flex flex-col gap-2">
@@ -132,9 +142,11 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import { useDeliveryStore } from "../../store/myDeliveryStore";
 import useChatStore from "../../store/chatStore";
 import { useRouter } from "vue-router";
+import { importLibrary } from "../../utils/googleMaps"; // Import your utility
 
 const router = useRouter();
 const chatStore = useChatStore();
@@ -142,8 +154,73 @@ const store = useDeliveryStore();
 const item = store.selectedDelivery;
 const show = 0; // placeholder, update if needed
 
-const getImage = (name) => {
-  return new URL(`../../assets/img/${name}`, import.meta.url).href;
+// const getImage = (name) => {
+//   return new URL(`../../assets/img/${name}`, import.meta.url).href;
+// };
+
+// --- GOOGLE MAPS SETUP ---
+const mapDiv = ref(null);
+let map = null;
+let directionsService = null;
+let directionsRenderer = null;
+
+onMounted(async () => {
+  if (item) {
+    await initMap();
+  }
+});
+
+const initMap = async () => {
+  const { Map } = await importLibrary("maps");
+  const { DirectionsService, DirectionsRenderer } = await importLibrary("routes");
+
+  // 1. Initialize the map
+  map = new Map(mapDiv.value, {
+    center: { lat: 11.5564, lng: 104.9282 }, // Phnom Penh
+    zoom: 13,
+    disableDefaultUI: true,
+    mapId: "USER_TRACKING_MAP", // Optional: for advanced styling
+  });
+
+  // 2. Setup Directions
+  directionsService = new DirectionsService();
+  directionsRenderer = new DirectionsRenderer({
+    map: map,
+    polylineOptions: {
+      strokeColor: "#1D4ED8", // Blue color for user route
+      strokeWeight: 6
+    }
+  });
+
+  calculateRoute();
+};
+
+const calculateRoute = () => {
+  // Use coordinates if available, otherwise fallback to text
+  // 1. Ensure we have both coordinates and convert them to Numbers just in case
+  const origin = (item.pickup_lat && item.pickup_lng) 
+    ? { lat: Number(item.pickup_lat), lng: Number(item.pickup_lng) } 
+    : item.pick_up_address;
+
+  const destination = (item.destination_lat && item.destination_lng) 
+    ? { lat: Number(item.destination_lat), lng: Number(item.destination_lng) } 
+    : item.destination_address;
+
+  // 2. Stop if data is totally missing
+  if (!origin || !destination) return;
+
+  // 3. Request the route
+  directionsService.route({
+    origin: origin,
+    destination: destination,
+    travelMode: "DRIVING",
+  }, (response, status) => {
+    if (status === "OK") {
+      directionsRenderer.setDirections(response);
+    } else {
+      console.error("Google Maps failed to find a route. Check addresses!");
+    }
+  });
 };
 
 const openChat = async () => {
