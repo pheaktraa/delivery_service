@@ -24,12 +24,12 @@ export const useUserStore = defineStore('user', {
         
         localStorage.setItem("token", res.data.token)
         this.error = null
-        this.success = res.data.message || "Login successful"
+        this.success = res.data.message
         return { success: true, message: res.data.message }
       } catch (err) {
-        const message = err.response?.data?.message || "Login failed"
+        const message = err.response?.data?.message
         this.error = message
-        return { success: false, message }
+        return { success: false, message: this.error }
       }
     },
 
@@ -58,7 +58,7 @@ export const useUserStore = defineStore('user', {
 
         return {
           success: false,
-          message,
+          message: this.error
         };
       }
     },
