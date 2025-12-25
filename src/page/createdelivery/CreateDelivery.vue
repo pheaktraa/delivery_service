@@ -249,15 +249,18 @@
 import { ref, computed, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useCreateDeliveryStore from "../../store/createDelivery";
-import { setupAutocomplete } from "../../utils/googleMaps";
+import { setupAutocomplete, getDistance } from "../../utils/googleMaps";
 
-
+// 1. ROUTER & STORE INITIALIZATION
 const router = useRouter();
 const createDeliveryStore = useCreateDeliveryStore();
 const showMessage = ref(false)
 
+// 2. REFS (State)
 const pickupInput = ref(null);
 const deliveryInput = ref(null);
+const selectedPayment = ref("");
+const selectedItemSize = ref("");
 
 const deliveryData = ref({
   pick_up_address: "",
@@ -273,9 +276,29 @@ const deliveryData = ref({
   weight: "",
   type_of_delivery: "",
   payment_type: "",
+  distance: 0,
   total_amount: 0,
 });
 
+// 3. CONSTANTS
+const sizeMultiplier = { S: 1, M: 1.5, L: 2 };
+
+// 4. LOGIC FUNCTIONS (Define these BEFORE onMounted)
+const updateDistance = async () => {
+  if (deliveryData.value.pickup_lat && deliveryData.value.destination_lat) {
+    const origin = { lat: deliveryData.value.pickup_lat, lng: deliveryData.value.pickup_lng };
+    const dest = { lat: deliveryData.value.destination_lat, lng: deliveryData.value.destination_lng };
+    
+    try {
+      const km = await getDistance(origin, dest);
+      deliveryData.value.distance = km; // Store km in state
+    } catch (e) {
+      console.error("Distance error:", e);
+    }
+  }
+};
+
+// 5. LIFECYCLE HOOKS
 // Initialize Google Maps Autocomplete
 onMounted(async () => {
   // Setup Pickup
@@ -286,6 +309,8 @@ onMounted(async () => {
     
     // Check your console when you click a suggestion!
     console.log("Captured Pickup Coordinates:", data.lat, data.lng);
+
+    updateDistance();
   });
 
   // Setup Destination
@@ -295,24 +320,40 @@ onMounted(async () => {
     deliveryData.value.destination_lng = data.lng;
     
     console.log("Captured Destination Coordinates:", data.lat, data.lng);
+
+    updateDistance();
   });
 });
 
-const selectedPayment = ref("");
-const selectedItemSize = ref("");
+// const selectedPayment = ref("");
+// const selectedItemSize = ref("");
 
-const sizeMultiplier = { S: 1, M: 1.5, L: 2 };
+// const sizeMultiplier = { S: 1, M: 1.5, L: 2 };
 
+// const priceitemweight = computed(() => {
+//   const weight = Number(deliveryData.value.weight);
+//   const multiplier = sizeMultiplier[deliveryData.value.itemsize] || 1;
+//   return weight * 0.50 * multiplier;
+// });
+
+// 6. COMPUTED PROPERTIES (Calculations)
 const priceitemweight = computed(() => {
-  const weight = Number(deliveryData.value.weight);
+  const weight = Number(deliveryData.value.weight) || 0;
+  const km = Number(deliveryData.value.distance) || 0;
   const multiplier = sizeMultiplier[deliveryData.value.itemsize] || 1;
-  return weight * 0.50 * multiplier;
+
+  // FORMULA: $1 base + $0.50 per km + $0.10 per kg
+  const total = (1.00 + (km * 0.50) + (weight * 0.10)) * multiplier;
+  
+  return parseFloat(total.toFixed(2)); // Round to 2 decimals
 });
 
+// 7. WATCHERS
 watch(priceitemweight, (newVal) => {
   deliveryData.value.total_amount = newVal;
 });
 
+// 8. UI HELPERS (Button clicks)
 function selectPayment(method) {
   selectedPayment.value = method;
   deliveryData.value.payment_type = method;
@@ -323,6 +364,7 @@ function selectitemsize(size) {
   deliveryData.value.itemsize = size;
 }
 
+// 9. SUBMISSION HANDLER
 async function handleCreateDelivery() {
   const values = deliveryData.value;
 
@@ -354,18 +396,18 @@ async function handleCreateDelivery() {
     return;
   }
 
-  // PHONE VALIDATION
-  const phoneRegex = /^[0-9+]{8,15}$/; 
-  if (!phoneRegex.test(values.receiver_contact)) {
-    createDeliveryStore.error = "Please enter a valid phone number (8-15 digits)";
+  // MAP COORDINATE CHECK (Ensure they used the Google Autocomplete)
+  if (!values.pickup_lat || !values.destination_lat) {
+    createDeliveryStore.error = "Please select addresses from the suggestions dropdown";
     showMessage.value = true;
     setTimeout(() => (showMessage.value = false), 2500);
     return;
   }
 
-  // MAP COORDINATE CHECK (Ensure they used the Google Autocomplete)
-  if (!values.pickup_lat || !values.destination_lat) {
-    createDeliveryStore.error = "Please select addresses from the suggestions dropdown";
+  // PHONE VALIDATION
+  const phoneRegex = /^[0-9+]{8,15}$/; 
+  if (!phoneRegex.test(values.receiver_contact)) {
+    createDeliveryStore.error = "Please enter a valid phone number (8-15 digits)";
     showMessage.value = true;
     setTimeout(() => (showMessage.value = false), 2500);
     return;

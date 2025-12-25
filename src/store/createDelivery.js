@@ -163,6 +163,33 @@ const useCreateDeliveryStore = defineStore('createDelivery', {
       }   
     },
 
+    async getDriverStats() {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          `${API_URL}/transporter/stats`, // Matches the route we created
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        // This returns { success, total_delivered, total_earnings, company_commission }
+        return res.data;
+
+      } catch (err) {
+        const message = err.response?.data?.message || "Failed to fetch driver stats";
+        this.error = message;
+        console.error("Store getDriverStats Error:", message);
+        return { 
+          success: false, 
+          total_delivered: 0, 
+          total_earnings: "0.00" 
+        };
+      }
+    },
+
   }
 });
 
