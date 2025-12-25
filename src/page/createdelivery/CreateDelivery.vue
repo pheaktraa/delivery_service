@@ -61,9 +61,10 @@
                 >Recipient Contact</label
               >
               <input
-                type="text"
+                type="tel"
                 id="recipientContact"
                 v-model="deliveryData.receiver_contact"
+                placeholder="012345678"
                 class="p-3 rounded-lg border-(--gray-300) border-2 focus:outline-none focus:border-(--red-800) bg-white"
               />
             </div>
@@ -143,7 +144,9 @@
                 >Item Weight: Kg</label
               >
               <input
-                type="text"
+                type="number"
+                step="0.1"
+                min="0.1"
                 id="itemWeight"
                 v-model="deliveryData.weight"
                 class="p-3 rounded-lg border-(--gray-300) border-2 focus:outline-none focus:border-(--red-800) bg-white"
@@ -323,7 +326,7 @@ function selectitemsize(size) {
 async function handleCreateDelivery() {
   const values = deliveryData.value;
 
-  // --- FRONTEND VALIDATION ---
+  // FRONTEND VALIDATION GENERAL FIELD CHECK (Check if anything is empty first)
   if (
     !values.pick_up_address ||
     !values.receiver_name ||
@@ -333,7 +336,7 @@ async function handleCreateDelivery() {
     !values.itemsize ||
     !values.weight ||
     !values.type_of_delivery ||
-    !values.payment_type
+    !values.payment_type // should comment it out
   ) {
     createDeliveryStore.error = "Please fill all fields";
     createDeliveryStore.success = null;
@@ -342,20 +345,40 @@ async function handleCreateDelivery() {
     return;
   }
 
-  // clear old messages
-  createDeliveryStore.error = null;
-  createDeliveryStore.success = null;
+  // WEIGHT VALIDATION (Check if weight is a valid positive number)
+  const weightNum = Number(values.weight);
+  if (isNaN(weightNum) || weightNum <= 0) {
+    createDeliveryStore.error = "Weight must be a valid number greater than 0";
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
+    return;
+  }
 
-  // Add coordinate check to your validation
+  // PHONE VALIDATION
+  const phoneRegex = /^[0-9+]{8,15}$/; 
+  if (!phoneRegex.test(values.receiver_contact)) {
+    createDeliveryStore.error = "Please enter a valid phone number (8-15 digits)";
+    showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
+    return;
+  }
+
+  // MAP COORDINATE CHECK (Ensure they used the Google Autocomplete)
   if (!values.pickup_lat || !values.destination_lat) {
     createDeliveryStore.error = "Please select addresses from the suggestions dropdown";
     showMessage.value = true;
+    setTimeout(() => (showMessage.value = false), 2500);
     return;
   }
+
+  // Clear messages before API call
+  createDeliveryStore.error = null;
+  createDeliveryStore.success = null;
 
   console.log("DATA BEING SENT TO STORE:", JSON.stringify(values, null, 2));
 
   // --- API REQUEST ---
+  console.log("SENDING TO STORE:", values);
   const res = await createDeliveryStore.createDelivery(values);
 
   // SUCCESS
