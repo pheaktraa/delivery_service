@@ -73,11 +73,11 @@
        
         <!-- BOX CONTAINER -->
         <div
-          class="bg-white rounded-2xl flex items-center justify-between p-6 sd"
+          class="bg-white w-fit rounded-2xl flex items-center justify-between p-6 sd"
         >
           <!-- CIRCLE INSIDE BOX -->
           <div
-            class="w-16 h-16 rounded-full bg-[#cd1c18] shadow-xl flex items-center justify-center"
+            class="min-w-16 h-16 rounded-full bg-[#cd1c18] shadow-xl flex items-center justify-center"
           >
             <span class="">
               <svg
