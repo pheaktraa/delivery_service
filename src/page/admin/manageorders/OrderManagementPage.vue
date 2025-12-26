@@ -42,7 +42,7 @@
             <tr 
               v-for="delivery in filteredDeliveries"
               :key="delivery.id"
-              class="hover:bg-(--gray-100) transition duration-300 font-bold"
+              class="bg-white hover:bg-(--gray-100) border-b border-(--gray-300) transition duration-300 font-bold"
             >
 
             <!-- Delivery ID -->
