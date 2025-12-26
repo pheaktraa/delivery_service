@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto px-[5rem]">
-    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd">
+  <div class="max-w-[80rem] m-auto">
+    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd h-screen">
       <!-- PAGE TITLE -->
       <div class="border-b-2 border-gray-300 pb-4">
         <p class="text-[length:var(--text-title)] font-extrabold">User Management</p>
@@ -42,7 +42,7 @@
 
       <!-- USERS TABLE -->
       <div
-        class="w-full h-full overflow-x-auto mt-8 border border-gray-300 rounded-lg overflow-hidden"
+        class="w-full overflow-x-auto mt-8 border border-gray-300 rounded-lg overflow-hidden"
       >
         <table class="w-full border-collapse text-fixed">
           <!-- Table Header -->
@@ -51,7 +51,7 @@
               <th class="p-4 text-left font-bold text-gray-800">User ID</th>
               <th class="p-4 text-left font-bold text-gray-800">User Info</th>
               <th class="p-4 text-left font-bold text-gray-800">Status</th>
-              <th class="p-4 text-left font-bold text-gray-800">Phone</th>
+              <th class="p-4 text-left font-bold text-gray-800">Email</th>
               <th class="p-4 text-left font-bold text-gray-800">Action</th>
             </tr>
           </thead>

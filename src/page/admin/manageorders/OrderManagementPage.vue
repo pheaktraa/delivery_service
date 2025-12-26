@@ -1,6 +1,6 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto px-[5rem]">
-    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd">
+  <div class="max-w-[80rem] m-auto">
+    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd h-screen">
       <div>
         <p class="text-[length:var(--text-title)] font-extrabold">Order Management</p>
       </div>
@@ -24,7 +24,7 @@
         </label>
       </div>
 
-      <div class="w-full h-full overflow-x-auto mb-[1rem] border border-(--gray-300) rounded-lg">
+      <div class="w-full overflow-x-auto mb-[1rem] border border-(--gray-300) rounded-lg">
         <table class="w-full border-collapse text-fixed">
           <thead class="bg-gray-200 border-b border-(--gray-300)">
 
