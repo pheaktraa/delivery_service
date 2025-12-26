@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
+    "@supabase/supabase-js": "^2.89.0",
     "@tailwindcss/vite": "^4.1.14",
     "aos": "^2.3.4",
     "apexcharts": "^5.3.6",

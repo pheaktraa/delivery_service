@@ -26,6 +26,20 @@
         <div class="h-[400px] lg:h-full lg:min-h-[600px] relative bg-gray-100">
           <!-- Actual Map Container -->
           <div ref="mapDiv" class="w-full h-full"></div>
+
+          <!-- FLOATING DISTANCE BADGE -->
+           <!-- CHANGED 'item' use in user to 'order' driver -->
+          <div v-if="order && order.distance" class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-lg shadow-md border border-gray-200 z-10">
+            <p class="text-xs font-bold text-gray-500 uppercase">Total Distance</p>
+            <p class="text-lg font-bold text-(--red-800)">{{ Number(order.distance).toFixed(2) }} km</p>
+          </div>
+
+          <!-- Overlay for when there is no data -->
+           <!-- CHANGED '!item' to '!order.delivery_id' -->
+          <div v-if="!order.delivery_id" class="absolute inset-0 flex items-center justify-center text-gray-400">
+            No delivery data found.
+          </div>
+
         </div>
 
         <!-- RIGHT COLUMN: DETAILS -->
@@ -59,14 +73,30 @@
             </div>
 
             <!-- 3. ITEM & PAYMENT -->
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <!-- Column Weight -->
               <div>
-                <p class="text-xs font-bold text-(--gray-400) uppercase">Item Type</p>
-                <p class="font-bold text-(--gray-800)">{{ order.itemType }} ({{ order.weight }})</p>
+                <p class="text-xs font-bold text-(--gray-400) uppercase">Item Weight</p>
+                <p class="font-bold text-(--gray-800)">{{ order.weight }} Kg</p>
               </div>
+              <!-- Column Distance -->
+              <div>
+                <p class="text-xs font-bold text-(--gray-400) uppercase">Distance</p>
+                <!-- We use Number().toFixed(1) to make it look clean (e.g. 8.3 km) -->
+                <p class="font-bold text-(--gray-800)"> 
+                  {{ order.distance ? Number(order.distance).toFixed(2) + ' km' : '...' }}
+                </p>
+              </div>
+              <!-- Column Payment (total) -->
               <div>
                 <p class="text-xs font-bold text-(--gray-400) uppercase">Payment</p>
                 <p class="font-bold text-green-600">${{ order.total_amount  }}</p>
+                <p class="font-bold text-(--gray-800)">{{ order.payment_type }}</p>
+              </div>
+              <!-- Column Payment (driver share) -->
+              <div>
+                <p class="text-xs font-bold text-(--gray-400) uppercase">Driver Payment</p>
+                <p class="font-bold text-green-600">${{ driverEarning  }}</p>
                 <p class="font-bold text-(--gray-800)">{{ order.payment_type }}</p>
               </div>
             </div>
@@ -103,10 +133,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import useCreateDeliveryStore from '../../store/createDelivery'
-import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
+// import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
+import { importLibrary, animateMarkerAlongPath, stopMarkerAnimation } from "../../utils/googleMaps"
 
 const route = useRoute()
 const router = useRouter()
@@ -114,37 +145,69 @@ const deliveryStore = useCreateDeliveryStore()
 const order = ref({})
 const showMessage = ref(false)
 
-// 1. Define the key from your .env file
-const myApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
-
-// 2. Set Options (Using the variable we just defined)
-setOptions({
-  apiKey: myApiKey, 
-  version: "weekly",
-});
-
-// 3. Google Maps Setup
-const mapDiv = ref(null) // Ref for the HTML element
+// --- STATE FOR ANIMATION ---
+const mapDiv = ref(null) 
 let map = null
 let directionsService = null
 let directionsRenderer = null
+let movingMarker = null // The Car icon
+let roadPath = []       // The list of dots from Google
+
+// NEW EARNING LOGIC GOES HERE
+const driverEarning = computed(() => {
+  if (!order.value.total_amount) return "0.00";
+  
+  // Calculate 80% for the driver
+  const earning = Number(order.value.total_amount) * 0.8;
+  return earning.toFixed(2);
+});
+
+// Calculate the Company Fee (20%) just in case you want to show it
+// const companyFee = computed(() => {
+//   if (!order.value.total_amount) return "0.00";
+//   const fee = Number(order.value.total_amount) * 0.2;
+//   return fee.toFixed(2);
+// });
+
+// // 1. Define the key from your .env file
+// const myApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
+
+// // 2. Set Options (Using the variable we just defined)
+// setOptions({
+//   apiKey: myApiKey, 
+//   version: "weekly",
+// });
+
+// // 3. Google Maps Setup
+// const mapDiv = ref(null) // Ref for the HTML element
+// let map = null
+// let directionsService = null
+// let directionsRenderer = null
 
 const orderId = Number(route.params.id);
 console.log("delivered_id", orderId);
+
+const currentStep = ref(0)
 
 onMounted(async () => {
   // DEBUGGING: This will tell us if Vite can see your file
   // console.log("CHECK 1: Env Object:", import.meta.env)
   // console.log("CHECK 2: API Key value:", myApiKey)
 
-  if (!myApiKey) {
-    console.error("CRITICAL ERROR: API Key is missing! Check your .env file name and content.")
-    return
-  }
+  // if (!myApiKey) {
+  //   console.error("CRITICAL ERROR: API Key is missing! Check your .env file name and content.")
+  //   return
+  // }
 
   try {
     const data = await deliveryStore.getDeliveryById(orderId)
     order.value = data.delivery
+
+    // Sync currentStep with database status if needed
+    if(order.value.status === 'accepted') currentStep.value = 1
+    if(order.value.status === 'in_transit') currentStep.value = 2
+    if(order.value.status === 'delivered') currentStep.value = 3
+
     initMap()
   } catch (err) {
     console.error('Failed to load delivery', err)
@@ -152,7 +215,8 @@ onMounted(async () => {
 })
 
 const initMap = async () => {
-  const { Map } = await importLibrary("maps")
+  const { Map } = await importLibrary("maps");
+  const { Marker } = await importLibrary("marker");
   const { DirectionsService, DirectionsRenderer } = await importLibrary("routes")
 
   map = new Map(mapDiv.value, {
@@ -166,6 +230,17 @@ const initMap = async () => {
     map: map,
     polylineOptions: { strokeColor: "#EF4444", strokeWeight: 5 }
   })
+
+  // Create the Moving Car Marker (Invisible at first)
+  movingMarker = new Marker({
+    map: map,
+    visible: false, 
+    icon: {
+      url: "https://maps.google.com/mapfiles/kml/pal2/icon47.png", 
+      scaledSize: new google.maps.Size(32, 32),
+      anchor: new google.maps.Point(16, 16)
+    }
+  });
 
   calculateAndDisplayRoute()
 }
@@ -192,6 +267,11 @@ const calculateAndDisplayRoute = () => {
   }, (response, status) => {
     if (status === "OK") {
       directionsRenderer.setDirections(response);
+
+      // CAPTURE THE ROAD PATH (The dots)
+      roadPath = response.routes[0].overview_path;
+      console.log("Road path captured. Ready for animation!");
+
     } else {
       console.error("Google Maps failed to find a route. Check addresses!");
     }
@@ -203,13 +283,13 @@ watch(() => order.value, () => {
   if (map) calculateAndDisplayRoute()
 }, { deep: true })
 
-const currentStep = ref(0) 
+// const currentStep = ref(0) 
 
 // 4. ACTION HANDLER
 const handleMainAction = async () => {
   try {
     if (currentStep.value === 0) {
-      // Accept delivery
+      // Logic: Accept -> Status 1
       const result = await deliveryStore.acceptDelivery(orderId)
       if (result.success) {
         order.value = result.delivery
@@ -220,17 +300,33 @@ const handleMainAction = async () => {
         showMessage.value = true;
         setTimeout(() => (showMessage.value = false), 2600);
       }
-    } else if (currentStep.value === 1 || currentStep.value === 2) {
-      // Update delivery status
-      const result = await deliveryStore.updateDeliveryStatus(orderId, currentStep.value + 1)
+    } else if (currentStep.value === 1) {
+      // Logic: Confirm Pickup -> Status 2 (START ANIMATION)
+      const result = await deliveryStore.updateDeliveryStatus(orderId, 2)
       if (result.success) {
         order.value = result.delivery
-        currentStep.value += 1
-        showMessage.value = true;
-        setTimeout(() => (showMessage.value = false), 2600);
-      } else {
-        showMessage.value = true;
-        setTimeout(() => (showMessage.value = false), 2600);
+        currentStep.value = 2
+        
+        // START THE "DUMMY" TRIP (15 seconds long)
+        movingMarker.setVisible(true);
+        // Change 20 to 30 for a slow, 30-second trip
+        // Change 20 to 5 for a very fast, 5-second trip
+        animateMarkerAlongPath(movingMarker, roadPath, 30);
+      }
+    } else if (currentStep.value === 2) {
+      // Logic: Confirm Delivery -> Status 3 (STOP & SKIP)
+      const result = await deliveryStore.updateDeliveryStatus(orderId, 3)
+      if (result.success) {
+        order.value = result.delivery
+        currentStep.value = 3
+        
+        // FORCE CAR TO DESTINATION AND STOP
+        const dest = { lat: Number(order.value.destination_lat), lng: Number(order.value.destination_lng) };
+        stopMarkerAnimation(movingMarker, dest);
+        
+        // TIMER
+        // 5000 means the car stays for 5 seconds before disappearing
+        setTimeout(() => movingMarker.setVisible(false), 5000);
       }
     } else if (currentStep.value === 3) {
       router.push('/driver/accDelivery')
@@ -250,4 +346,13 @@ const buttonText = computed(() => {
     default: return 'Back to List'
   }
 })
+
+// Cleanup animation if user leaves the page
+// onMounted(() => {
+//   return () => stopMarkerAnimation();
+// })
+onUnmounted(() => {
+  stopMarkerAnimation();
+})
+
 </script>
