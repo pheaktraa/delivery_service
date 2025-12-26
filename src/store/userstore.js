@@ -163,27 +163,28 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async updateUserStatus(userId, status) {  // ✅ move it here
+    async updateUserStatus(userId, status) {  
       try {
         const res = await axios.patch(`${API_URL}/auth/updatestatus/${userId}`, {
           status: status
         });
-        this.success = res.data.message || "User status updated successfully";
+        this.success = res.data.message;
         this.error = null;
         return { success: true, message: this.success };
       } catch (err) {
-        const message = err.response?.data?.message || "Failed to update user status";
+        const message = err.response?.data?.message;
         this.error = message;
         return { success: false, message };
       }
     },
 
-    async updateUserProfile(userId, firstname, lastname, email) {  // ✅ move it here
+    async updateUserProfile(userId, firstname, lastname, email, status) { 
       try {
         const res = await axios.patch(`${API_URL}/auth/updateprofile/${userId}`, {
           firstname,
           lastname,
-          email
+          email,
+          status
         });
         this.success = res.data.message || "User profile updated successfully";
         this.error = null;
@@ -222,7 +223,7 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    async updateTransporterProfile(transporterId, firstname, lastname, email, license_plate, vehicle_type) {
+    async updateTransporterProfile(transporterId, firstname, lastname, email, license_plate, vehicle_type, status) {
       try {
         const res = await axios.patch(`${API_URL}/transporter/updatetransporterprofile/${transporterId}`, {
           firstname,
@@ -230,6 +231,7 @@ export const useUserStore = defineStore('user', {
           email,
           license_plate,
           vehicle_type,
+          status
         });
         this.success = res.data.message || "Transporter profile updated successfully";
         this.error = null;
