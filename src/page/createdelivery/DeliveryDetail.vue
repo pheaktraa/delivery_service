@@ -5,8 +5,8 @@
         <p class="text-[length:var(--text-title)] text-[var(--red-800)] font-semibold mb-[1rem]">
           Order Confirmed!
         </p>
-        <div class="text-[length:var(--text-description)] text-[var(--gray-800)] flex justify-between p-4">
-          <div class="flex-1">
+        <div class="text-[length:var(--text-description)] text-[var(--gray-800)] grid md:grid-cols-1 lg:grid-cols-2 gap-6 p-4">
+          <div class="">
             <p class="mb-[1rem]">Order Details:</p>
             <ul class="list-disc list-inside mb-[1rem]">
               <li>
@@ -44,7 +44,7 @@
               <li><strong>Payment :</strong> {{ getdata?.payment_type }}</li>
             </ul>
           </div>
-          <div>
+          <div class="mb-[2rem] flex flex-col items-center">
             <img
               src="../../assets/img/aba_khqr.jpg"
               alt="QR Code for Payment"

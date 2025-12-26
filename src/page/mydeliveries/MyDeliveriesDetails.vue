@@ -15,7 +15,7 @@
       <div class="w-full h-full overflow-x-auto mt-[2rem] mb-[1rem]">
         <div
           v-if="item"
-          class="w-full h-full grid grid-cols-2 gap-[2rem] p-[2rem] border-0 border-(--gray-300) rounded-lg bg-white"
+          class="w-full h-full grid md:grid-cols-1 lg:grid-cols-2 gap-[2rem] p-[2rem] border-0 border-(--gray-300) rounded-lg bg-white"
         >
           <!-- <div
             class="border border-(--gray-300) rounded-lg p-[1rem] flex items-center justify-center"
@@ -27,7 +27,7 @@
             />
           </div> -->
           <!-- Replace your current image container with this -->
-          <div class="border border-(--gray-300) rounded-lg overflow-hidden bg-gray-50 h-[450px] relative">
+          <div class="border border-(--gray-300) rounded-lg overflow-hidden bg-gray-50 h-[450px] lg:h-full lg:min-h-[550px] relative">
             <!-- The actual Map -->
             <div ref="mapDiv" class="w-full h-full"></div>
 
@@ -160,7 +160,7 @@
 import { ref, onMounted, watch, onUnmounted } from "vue";
 import { useDeliveryStore } from "../../store/myDeliveryStore";
 import useChatStore from "../../store/chatStore";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { importLibrary, animateMarkerAlongPath, stopMarkerAnimation } from "../../utils/googleMaps";
 import { supabase } from "../../utils/supabase";
 
