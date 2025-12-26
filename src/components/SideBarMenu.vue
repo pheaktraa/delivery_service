@@ -4,9 +4,11 @@
     
     <!-- BRAND LOGO -->
     <div class="h-[6rem] p-6 border-b-2 border-white  flex items-center justify-center">
-      <h1 class="text-4xl font-extrabold italic">
+      <h1 class="text-4xl font-bold ita">
         <span class="text-white">Move</span>
-        <span>Smart</span></h1>
+        <span>Smart</span>
+      </h1>
+           <!-- <img src="../assets/img/logo2.png" alt="" class="bg-red "> -->
     </div>
 
     <!-- MENU LIST -->

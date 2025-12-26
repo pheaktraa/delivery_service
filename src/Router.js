@@ -29,6 +29,7 @@ const routes = [
   { path: '/', component: Landing },
   { path: '/home', component: Home },
   { path: '/auth/login', component: Loginpage },
+  { path: '/signup', component: Loginpage },
   { path: '/contact', component: ContactPage },
   { path: '/aboutus', component: AboutPage },
   { path: '/profile', component: ProfilePage},
