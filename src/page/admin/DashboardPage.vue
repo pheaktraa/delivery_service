@@ -174,7 +174,7 @@
           </div>
 
           <!-- Table List -->
-          <div class="overflow-x-auto border border-(--gray-300) rounded-lg">
+          <div class="overflow-x-auto border border-(--gray-300)">
             <!-- TABLE -->
             <table class="w-full border-collapse">
               <!-- TABLE HEADER -->

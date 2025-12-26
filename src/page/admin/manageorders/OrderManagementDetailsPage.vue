@@ -4,7 +4,7 @@
       <div class="flex justify-between">
         <p class="text-[length:var(--text-title)] font-extrabold">Order Management Details</p>
         <button @click="router.back()" 
-          class="text-xl text-white bg-(--gray-800) px-4 py-2 rounded-xl hover:bg-red-500">
+          class="text-xl text-white bg-(--gray-800) px-4 py-2 rounded-xl hover:bg-(--gray-600) transition-all duration-300">
           Back
         </button>
       </div>
