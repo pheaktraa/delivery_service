@@ -31,11 +31,9 @@
                     <div class="z-30">
                         <img src="../assets/img/delivery01.png" alt="delivery01"
                             class="absolute p-4 bottom-0 left-0 w-[55%] h-[55%] object-contain">
-                        </img>
 
                         <img src="../assets/img/location.png" alt="delivery01"
                             class="absolute p-4 top-0 right-0 w-[55%] h-[55%] object-contain">
-                        </img>
                     </div>
 
                     <!-- Overlay boxes -->
@@ -60,7 +58,6 @@
             <!-- box left side (img) -->
             <div class="flex flex-1 bg-white border-(--red-700) border-2 rounded-[1rem]">
                 <img class="w-full h-70 object-contain" src="../assets/img/holding-board.jpg" alt="holding-board">
-                </img>
             </div>
             <!-- box on right side -->
             <div class="flex flex-1 flex-column flex-wrap">
@@ -99,11 +96,9 @@
                 <div class="flex gap-5 flex-wrap ">
                     <img class="w-[15rem] h-[10rem] bg-white border-(--red-700) border-2 p-0 rounded-[1rem] object-contain"
                         src="https://files.logistics.gov.kh/content/cms/mpwt_logo_2c03938805.png" alt="lebron">
-                    </img>
                     <img class="w-[15rem] h-[10rem] border-(--red-700) border-2 p-0 rounded-[1rem] object-fill"
                         src="https://www.khmertimeskh.com/wp-content/uploads/2023/02/Ministry-of-Economy-and-Finance.jpg"
                         alt="lebron">
-                    </img>
                 </div>
             </div>
         </div>
@@ -118,9 +113,8 @@
                 </div>
                 <!-- card -->
                 <div
-                    class="text-black p-[2rem] flex flex-col w-[70%] items-start bg-(--gray-200) rounded-[1rem] p-6 sd">
+                    class="text-black flex flex-col w-[70%] items-start bg-(--gray-100) rounded-[1rem] p-8 sd">
                     <img src="/src/assets/icon/location.svg" alt="location" class="w-6 h-6">
-                    </img>
                     <p class="text-(--red-700) font-bold">Track your oder live</p>
                     <p class="pt-[1rem]">Follow your Packges in real time, from checkout to doorstep. Stay in the loop
                         with every update-no
@@ -129,9 +123,8 @@
                 </div>
                 <!-- card -->
                 <div
-                    class="text-black p-[2rem] flex flex-col w-[70%] items-start bg-(--gray-200) rounded-[1rem] p-6 sd">
+                    class="text-black flex flex-col w-[70%] items-start bg-(--gray-100) rounded-[1rem] p-8 sd h-[14rem]">
                     <img src="/src/assets/icon/account_circle.svg" alt="location" class="w-6 h-6">
-                    </img>
                     <p class="text-(--red-700) font-bold">Personalize your profile</p>
                     <p class="pt-[1rem]">Easily update your information, items, and manage your inventory.
                     </p>
@@ -146,9 +139,8 @@
                 </div>
                 <!-- card -->
                 <div
-                    class="text-black p-[2rem] flex flex-col w-[70%] items-start bg-(--gray-200) rounded-[1rem] p-6 sd">
+                    class="text-black flex flex-col w-[70%] items-start bg-(--gray-100) rounded-[1rem] p-8 sd">
                     <img src="../assets/icon/card.svg" alt="card" class="w-6 h-6">
-                    </img>
                     <p class="text-(--red-700) font-bold">See every product detail</p>
                     <p class="pt-[1rem]">Instantly view your order's status, delivery progress, and product info.
                         Everything
@@ -157,9 +149,8 @@
                 </div>
                 <!-- card -->
                 <div
-                    class="text-black p-[2rem] flex flex-col w-[70%] items-start bg-(--gray-200) rounded-[1rem] p-6 sd">
+                    class="text-black flex flex-col w-[70%] items-start bg-(--gray-100) rounded-[1rem] p-8 sd">
                     <img src="../assets/icon/truck.svg" alt="truck" class="w-6 h-6">
-                    </img>
                     <p class="text-(--red-700) font-bold">Simple, easy delivery</p>
                     <p class="pt-[1rem]">Enjoy a seamless experience from browsing to delivery. We keep things clear,
                         easy, and
@@ -178,10 +169,10 @@
             </div>
             <!-- scroll container -->
             <div id="feedbackContainer"
-                class="overflow-x-auto overflow-y-hidden flex flex-nowrap gap-5 mt-[2rem] scroll-smooth px-4 h-[15rem] snap-x snap-mandatory">
+                class="overflow-x-auto overflow-y-hidden flex flex-nowrap gap-5 mt-[2rem] scroll-smooth px-4 h-[15rem] snap-x snap-mandatory hide-scrollbar py-2">
                 <!-- card -->
                 <div
-                    class="text-black text-justify w-[30rem] bg-(--gray-200) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[auto] flex-shrink-0" v-for="(rate,index) in ratings" :key="index">
+                    class="text-black text-justify w-[30rem] bg-(--gray-100) rounded-[1rem] flex flex-col items-start p-6 sd snap-start h-[auto] flex-shrink-0 " v-for="(rate,index) in ratings" :key="index">
 
                     <!-- icon + username -->
                     <div class="flex gap-3 w-full">
@@ -212,4 +203,16 @@ onMounted(async () => {
 
 
 
-<style></style>
+<style>
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+.hide-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
+}
+
+</style>
