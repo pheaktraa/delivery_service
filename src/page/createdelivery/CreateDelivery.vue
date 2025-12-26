@@ -293,7 +293,10 @@ const updateDistance = async () => {
       const km = await getDistance(origin, dest);
       deliveryData.value.distance = km; // Store km in state
     } catch (e) {
-      console.error("Distance error:", e);
+      // If no route is found, set a default distance or show an alert
+      console.error(e);
+      deliveryData.value.distance = 0; 
+      alert("Google could not find a driving route between these locations. Please try more specific addresses.");
     }
   }
 };
@@ -324,17 +327,6 @@ onMounted(async () => {
     updateDistance();
   });
 });
-
-// const selectedPayment = ref("");
-// const selectedItemSize = ref("");
-
-// const sizeMultiplier = { S: 1, M: 1.5, L: 2 };
-
-// const priceitemweight = computed(() => {
-//   const weight = Number(deliveryData.value.weight);
-//   const multiplier = sizeMultiplier[deliveryData.value.itemsize] || 1;
-//   return weight * 0.50 * multiplier;
-// });
 
 // 6. COMPUTED PROPERTIES (Calculations)
 const priceitemweight = computed(() => {

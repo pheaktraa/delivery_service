@@ -153,39 +153,41 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 import { useDeliveryStore } from "../../store/myDeliveryStore";
 import useChatStore from "../../store/chatStore";
-import { useRouter } from "vue-router";
-import { importLibrary } from "../../utils/googleMaps"; // Import your utility
+import { useRoute, useRouter } from "vue-router";
+import { importLibrary, animateMarkerAlongPath, stopMarkerAnimation } from "../../utils/googleMaps";
+import { supabase } from "../../utils/supabase";
 
+// ROUTER & STORE SETUP
 const router = useRouter();
 const chatStore = useChatStore();
 const store = useDeliveryStore();
 const item = store.selectedDelivery;
+
+
+// REACTIVE STATE (Refs)
+const mapDiv = ref(null);
 const show = 0; // placeholder, update if needed
 
-// const getImage = (name) => {
-//   return new URL(`../../assets/img/${name}`, import.meta.url).href;
-// };
-
-// --- GOOGLE MAPS SETUP ---
-const mapDiv = ref(null);
+// NON-REACTIVE STATE (Map objects and Subscriptions)
 let map = null;
 let directionsService = null;
 let directionsRenderer = null;
+let statusSubscription = null; // To hold the Realtime listener
+// STATE FOR ANIMATION
+let movingMarker = null; // The Car icon
+let roadPath = []       // The list of dots from Google
 
-onMounted(async () => {
-  if (item) {
-    await initMap();
-  }
-});
-
+// MAP & ROUTE FUNCTIONS
 const initMap = async () => {
+  // Unpack Map and Marker tools
   const { Map } = await importLibrary("maps");
+  const { Marker } = await importLibrary("marker"); 
   const { DirectionsService, DirectionsRenderer } = await importLibrary("routes");
 
-  // 1. Initialize the map
+  // Initialize the map
   map = new Map(mapDiv.value, {
     center: { lat: 11.5564, lng: 104.9282 }, // Phnom Penh
     zoom: 13,
@@ -193,13 +195,24 @@ const initMap = async () => {
     mapId: "USER_TRACKING_MAP", // Optional: for advanced styling
   });
 
-  // 2. Setup Directions
+  // Setup Directions
   directionsService = new DirectionsService();
   directionsRenderer = new DirectionsRenderer({
     map: map,
     polylineOptions: {
       strokeColor: "#1D4ED8", // Blue color for user route
       strokeWeight: 6
+    }
+  });
+
+  // Create the Car Marker (Hidden until transit starts)
+  movingMarker = new Marker({
+    map: map,
+    visible: false,
+    icon: {
+      url: "https://maps.google.com/mapfiles/kml/pal2/icon47.png",
+      scaledSize: new google.maps.Size(32, 32),
+      anchor: new google.maps.Point(16, 16)
     }
   });
 
@@ -228,12 +241,48 @@ const calculateRoute = () => {
   }, (response, status) => {
     if (status === "OK") {
       directionsRenderer.setDirections(response);
+
+      // 4. CAPTURE THE PATH (The train tracks for our car)
+      roadPath = response.routes[0].overview_path;
+      console.log("User side: Road path ready.");
+
     } else {
       console.error("Google Maps failed to find a route. Check addresses!");
     }
   });
 };
 
+// ANIMATION & REALTIME FUNCTIONS
+const startTrackingAnimation = () => {
+  if (movingMarker && roadPath.length > 0) {
+    movingMarker.setVisible(true);
+    // Make the car finish the trip in 20 seconds for the class demo
+    animateMarkerAlongPath(movingMarker, roadPath, 30);
+  }
+};
+
+const subscribeToStatusUpdates = () => {
+  // Listen for changes to THIS specific delivery ID in Supabase
+  statusSubscription = supabase
+    .channel(`order-${item.delivery_id}`)
+    .on(
+      'postgres_changes',
+      { 
+        event: 'UPDATE', 
+        schema: 'public', 
+        table: 'createdeliveries', 
+        filter: `delivery_id=eq.${item.delivery_id}` 
+      },
+      (payload) => {
+        console.log("Realtime Update:", payload.new.status);
+        // This triggers the watcher below
+        item.status = payload.new.status; 
+      }
+    )
+    .subscribe();
+};
+
+// UI EVENT HANDLERS
 const openChat = async () => {
   if (!item) return;
 
@@ -250,9 +299,42 @@ const openChat = async () => {
 
   chatStore.setActiveConversation(conversation.id, item.transporter_name);
   
-
   router.push("/chat");
 };
 
+// LIFECYCLE HOOKS
+onMounted(async () => {
+  if (item) {
+    // Initialize the Map and Route
+    await initMap();
 
+    // START THE LISTENER
+    subscribeToStatusUpdates();
+
+    // DEMO LOGIC: If user opens page and it's already "in_transit", start car
+    if (item.status === 'in_transit') {
+      startTrackingAnimation();
+    }
+  }
+});
+
+// Cleanup
+onUnmounted(() => {
+  stopMarkerAnimation();
+  if (statusSubscription) {
+    supabase.removeChannel(statusSubscription);
+  }
+});
+
+// WATCHER: React to status changes (for Realtime presentation)
+watch(() => item.status, (newStatus) => {
+  if (newStatus === 'in_transit') {
+    startTrackingAnimation();
+  } else if (newStatus === 'delivered') {
+    const dest = { lat: Number(item.destination_lat), lng: Number(item.destination_lng) };
+    stopMarkerAnimation(movingMarker, dest);
+    // Hide car after 5 seconds
+    setTimeout(() => movingMarker.setVisible(false), 5000);
+  }
+});
 </script>
