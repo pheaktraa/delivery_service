@@ -2,13 +2,13 @@
   <div class="flex h-screen pt-[4.5rem] justify-between" v-if="['/chat'].includes(route.path)">
     <!-- Sidebar -->
     <div class="w-[25%] bg-white border-r border-gray-200 flex flex-col h-full" >
-      <div class="flex justify-between p-4 border-b">
+      <div class="flex justify-between p-[1.6rem] border-b">
         <div class="flex items-center gap-2">
           <p class="font-semibold text-lg">Chat</p>
-          <span class="network-status text-xs px-2 py-1 rounded"
+          <!-- <span class="network-status text-xs px-2 py-1 rounded"
             :class="isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
             {{ isOnline ? 'Online' : 'Offline' }}
-          </span>
+          </span> -->
         </div>
         <div class="flex items-center gap-2">
           <button 
@@ -22,7 +22,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </button>
-          <img src="../../assets/icon/chaticon2.svg" alt="chat icon" class="w-6 h-6" />
+          <!-- <img src="../../assets/icon/chaticon2.svg" alt="chat icon" class="w-6 h-6" /> -->
         </div>
       </div>
 
@@ -112,7 +112,7 @@
       </div>
       
       <!-- Storage info -->
-      <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
+      <!-- <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
         <div class="flex justify-between items-center">
           <span>Auto-saved</span>
           <span>{{ formatLastSync() }}</span>
@@ -128,7 +128,7 @@
             {{ storageUsage.used }}/{{ storageUsage.total }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Chat Area -->
@@ -144,7 +144,7 @@
             </div>
             <div>
               <p class="font-semibold text-lg">{{ transporterName }}</p>
-              <p class="text-sm text-gray-500 flex items-center">
+              <!-- <p class="text-sm text-gray-500 flex items-center">
                 <span :class="[
                   'w-2 h-2 rounded-full mr-2',
                   isOnline ? 'bg-green-500' : 'bg-gray-400'
@@ -153,7 +153,7 @@
                 <span v-if="failedMessagesCount > 0" class="ml-2 text-red-500 text-xs">
                   ({{ failedMessagesCount }} failed)
                 </span>
-              </p>
+              </p> -->
             </div>
           </div>
           <div class="flex items-center gap-2">
@@ -209,7 +209,7 @@
       <!-- Messages -->
       <div v-if="activeConversation" ref="messageBox" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         <!-- Connection status banner -->
-        <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <!-- <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,7 +225,7 @@
               Retry all
             </button>
           </div>
-        </div>
+        </div> -->
 
         <div v-if="messages.length === 0" class="flex items-center justify-center h-full">
           <div class="text-center">
@@ -354,13 +354,13 @@
   <div v-else class="flex h-screen justify-between absolute left-0">
     <!-- Sidebar -->
     <div class="w-[20rem] bg-white border-r border-gray-200 flex flex-col h-full" >
-      <div class="flex justify-between p-4 border-b">
+      <div class="flex justify-between p-[1.4rem] border-b">
         <div class="flex items-center gap-2">
           <p class="font-semibold text-lg">Chat</p>
-          <span class="network-status text-xs px-2 py-1 rounded"
+          <!-- <span class="network-status text-xs px-2 py-1 rounded"
             :class="isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
             {{ isOnline ? 'Online' : 'Offline' }}
-          </span>
+          </span> -->
         </div>
         <div class="flex items-center gap-2">
           <button 
@@ -374,7 +374,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
           </button>
-          <img src="../../assets/icon/chaticon2.svg" alt="chat icon" class="w-6 h-6" />
+          <!-- <img src="../../assets/icon/chaticon2.svg" alt="chat icon" class="w-6 h-6" /> -->
         </div>
       </div>
 
@@ -464,7 +464,7 @@
       </div>
       
       <!-- Storage info -->
-      <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
+      <!-- <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
         <div class="flex justify-between items-center">
           <span>Auto-saved</span>
           <span>{{ formatLastSync() }}</span>
@@ -480,7 +480,7 @@
             {{ storageUsage.used }}/{{ storageUsage.total }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Chat Area -->
@@ -497,14 +497,14 @@
             <div>
               <p class="font-semibold text-lg">{{ transporterName }}</p>
               <p class="text-sm text-gray-500 flex items-center">
-                <span :class="[
+                <!-- <span :class="[
                   'w-2 h-2 rounded-full mr-2',
                   isOnline ? 'bg-green-500' : 'bg-gray-400'
                 ]"></span>
                 {{ isOnline ? 'Online' : 'Offline' }} • {{ messages.length }} messages
                 <span v-if="failedMessagesCount > 0" class="ml-2 text-red-500 text-xs">
                   ({{ failedMessagesCount }} failed)
-                </span>
+                </span> -->
               </p>
             </div>
           </div>
@@ -561,7 +561,7 @@
       <!-- Messages -->
       <div v-if="activeConversation" ref="messageBox" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         <!-- Connection status banner -->
-        <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <!-- <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -577,7 +577,7 @@
               Retry all
             </button>
           </div>
-        </div>
+        </div> -->
 
         <div v-if="messages.length === 0" class="flex items-center justify-center h-full">
           <div class="text-center">
