@@ -71,6 +71,7 @@ const routes = [
 
   // chat
   { path: '/chat', component: index },
+  { path: '/chattransporter', component: index, meta: { layout: 'dashboard' } },
   
   // === TRANSPORTER / DRIVER ROUTES ===
   { path: '/driver/profile', component: DriverProfile, meta: { layout: 'dashboard' } },
