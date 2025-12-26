@@ -9,12 +9,18 @@ import VueApexCharts from "vue3-apexcharts"; // vue-version3-apexchart
 
 const app = createApp(App)
 const pinia = createPinia(); 
-app.use(router)
-app.mount('#app')
+
+// REGISTER EVERYTHING FIRST
+app.use(router);
 app.use(pinia); 
+app.use(VueApexCharts);
+
+// INITIALIZE EXTERNAL LIBS
 AOS.init({
   // Global settings for AOS (optional)
   duration: 900,
   once: true,
 });
-app.use(VueApexCharts);
+
+// MOUNT LAST 
+app.mount('#app');
