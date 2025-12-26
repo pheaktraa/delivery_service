@@ -16,7 +16,7 @@
             <!-- relative group -->
             <div class="relative">
                 <!-- The Image -->
-                <img src="../../assets/img/imgprofile.avif" alt="" class="w-40 rounded rounded-full">
+                <img src="../../assets/img/imgprofile.avif" alt="" class="w-40 rounded-full">
 
                 <!-- The Camera Icon (Only visible in Edit Mode) -->
                 <button v-if="isEditing" @click="triggerFileInput"
