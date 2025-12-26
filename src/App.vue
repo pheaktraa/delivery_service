@@ -8,6 +8,9 @@
 <template>
   <div class="min-h-screen flex flex-col">
 
+    <!-- snow -->
+    <SnowfallEffect />
+
     <!-- TOP NAVBAR -->
     <!-- Only shows on public pages (Home, About), hides on Admin/Driver pages -->
     <Navbar v-if="!hidePublicNav"></Navbar>
@@ -36,6 +39,7 @@ import { computed } from 'vue';
 import Footer from './components/Footer.vue';
 import Navbar from './components/Navbar.vue';
 import SideBarMenu from './components/SideBarMenu.vue';
+import SnowfallEffect from './components/SnowfallEffect.vue';
 
 const route = useRoute();
 
