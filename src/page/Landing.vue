@@ -182,7 +182,9 @@
                     <!-- body text -->
                     <p class="pt-[1rem] line-clamp-5">{{ rate.rating_text }}</p>
                 </div>
-
+                <div v-if="ratings.length === 0" class="w-full py-10">
+                    <p class="text-center text-(--gray-300)">No recent ratings found.</p>
+                </div>
             </div>
         </div>
     </div>
