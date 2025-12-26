@@ -1,10 +1,14 @@
 <template>
   <div class="max-w-[80rem] h-full m-auto page">
     <div class="mt-[2rem] bg-(--gray-100) p-[2rem] rounded-lg sd">
-      <div class="border-b-[2px] border-(--gray-300) pt-[2rem] pb-[2rem]">
+      <div class="border-b-[2px] border-(--gray-300) pt-[2rem] pb-[2rem] flex justify-between">
         <p class="text-(--red-800) text-[length:var(--text-title)] font-bold">
           My Deliveries Details
         </p>
+        <button @click="router.back()" 
+          class="text-xl text-white bg-(--red-800) px-4 py-2 rounded-xl hover:bg-(--red-600) transition-all duration-300">
+          Back
+        </button>
       </div>
 
       <!-- Items Details -->
@@ -75,13 +79,13 @@
               </div>
 
               <!-- Right side -->
-              <div class="flex flex-col gap-2 items-end">
+              <!-- <div class="flex flex-col gap-2 items-end">
                 <button
                   class="text-(--gray-100) border border-(--red-900) rounded-lg p-[.5rem] bg-(--red-700) hover:bg-(--red-800) hover:cursor-pointer"
                 >
                   Delete
                 </button>
-              </div>
+              </div> -->
             </div>
 
             <!-- Section 2 -->

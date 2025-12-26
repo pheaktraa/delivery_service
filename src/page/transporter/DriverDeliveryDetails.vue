@@ -1,7 +1,7 @@
 
 <template>
   <!-- main container -->
-  <div class="max-w-[80rem] h-full m-auto page">
+  <div class="max-w-[80rem] h-full m-auto page relative">
     
     <!-- HEADER -->
     <div class="flex justify-between items-center mb-[2rem]">
@@ -12,7 +12,7 @@
       
       <!-- Back Button -->
       <button @click="router.back()" 
-        class="text-xl text-white bg-(--gray-800) px-4 py-2 rounded-xl hover:bg-red-500">
+        class="text-xl text-white bg-(--gray-800) px-4 py-2 rounded-xl hover:bg-(--gray-600) transition-all duration-300">
         Back
       </button>
     </div>
@@ -117,7 +117,18 @@
 
       </div>
     </div>
-
+    <transition name="fade">
+      <div
+         v-if="showMessage"
+        class="absolute top-25 left-9/12 -translate-x-1/2 w-[16rem] py-3 px-4 text-center rounded-lg z-2"
+        :class="
+          deliveryStore.error ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+        "
+      >
+        <p v-if="deliveryStore.error">{{ deliveryStore.error }}</p>
+        <p v-else>{{ deliveryStore.success }}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -132,6 +143,7 @@ const route = useRoute()
 const router = useRouter()
 const deliveryStore = useCreateDeliveryStore()
 const order = ref({})
+const showMessage = ref(false)
 
 // --- STATE FOR ANIMATION ---
 const mapDiv = ref(null) 
@@ -282,8 +294,11 @@ const handleMainAction = async () => {
       if (result.success) {
         order.value = result.delivery
         currentStep.value = 1
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       } else {
-        alert(result.message)
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       }
     } else if (currentStep.value === 1) {
       // Logic: Confirm Pickup -> Status 2 (START ANIMATION)

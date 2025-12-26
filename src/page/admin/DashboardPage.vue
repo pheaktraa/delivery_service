@@ -75,7 +75,7 @@
        
         <!-- BOX CONTAINER -->
         <div
-          class="bg-white w-fit rounded-2xl flex items-center justify-between p-6 sd"
+          class="bg-white rounded-2xl flex items-center justify-between p-6 sd"
         >
           <!-- CIRCLE INSIDE BOX -->
           <div
@@ -106,9 +106,7 @@
             <p class="font-bold">Total Sales</p>
           </div>
         </div>
-      </div>
-
-      <!-- BOX CONTAINER -->
+        <!-- BOX CONTAINER -->
         <div
           class="bg-white w-fit rounded-2xl flex items-center justify-between p-6 sd"
         >
@@ -141,27 +139,10 @@
             <p class="font-bold">Total Revenue</p>
           </div>
         </div>
+      </div>
 
       <!-- CHART CONTAINER -->
       <div class="w-full bg-white rounded-2xl p-3 mt-[3rem]">
-        <!-- lg:grid-cols-3 -->
-        <!-- Column 1 -->
-        <!-- <div class="w-full flex flex-wrap">
-                    <RadialBarCircle class="flex-1"/>
-                    <RadialBarCircle class="flex-1"/>
-                    <LineChart class="flex-1"/>
-                </div> -->
-        <!-- Column 2 -->
-        <!-- <div>
-                    <RadialBarCircle />
-                </div> -->
-
-        <!-- Column 3 -->
-        <!-- <div class="w-full sm:col-span-2 md:col-span-1">
-                    <LineChart />
-                </div> -->
-
-        <!-- Column N (optional later) -->
 
         <div
           class="bg-white rounded-2xl mt-[2rem] shadow-sm border border-(--gray-200) overflow-hidden"
@@ -174,7 +155,7 @@
           </div>
 
           <!-- Table List -->
-          <div class="overflow-x-auto border border-(--gray-300) rounded-lg">
+          <div class="overflow-x-auto border border-(--gray-300)">
             <!-- TABLE -->
             <table class="w-full border-collapse">
               <!-- TABLE HEADER -->
