@@ -99,7 +99,7 @@ const useCreateDeliveryStore = defineStore('createDelivery', {
         return {
           success: true,
           message: this.success,
-          delivery: res.data.delivery // 👈 return accepted delivery
+          delivery: res.data.delivery // 
         };
       } catch (err) {
         const message = err.response?.data?.message || "Failed to accept delivery";

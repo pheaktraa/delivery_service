@@ -349,7 +349,7 @@ const openCreateModal = () => {
     email: '',
     password: '',
     license_plate: '',
-    vehicle_type: ''
+    vehicle_type: '',
   };
   showModal.value = true;
   isEditing.value = true;
@@ -399,7 +399,8 @@ const saveSelected = async () => {
           selectedUser.value.id,
           selectedUser.value.firstname,
           selectedUser.value.lastname,
-          selectedUser.value.email
+          selectedUser.value.email,
+          selectedUser.value.status
         );
         if (res.success) {
           const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
@@ -415,7 +416,8 @@ const saveSelected = async () => {
           selectedUser.value.lastname,
           selectedUser.value.email,
           selectedUser.value.license_plate,
-          selectedUser.value.vehicle_type
+          selectedUser.value.vehicle_type,
+          selectedUser.value.status
         );
         if (res.success) {
           const idx = users.value.findIndex(u => u.id === selectedUser.value.id);
@@ -460,6 +462,10 @@ const banSelected = async (item) => {
           showMessage.value = true;
           setTimeout(() => (showMessage.value = false), 2000);
       }
+      else {
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2000);
+      }
     } else if (activeTab.value === "transporter") {
       const res = await userStore.updateTransporterStatus(item.id, "banned");
       if (res.success) {
@@ -467,6 +473,10 @@ const banSelected = async (item) => {
         if (idx !== -1) users.value[idx].status = "banned";
           showMessage.value = true;
           setTimeout(() => (showMessage.value = false), 2000);
+      }
+      else {
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2000);
       }
     }
   } catch (err) {

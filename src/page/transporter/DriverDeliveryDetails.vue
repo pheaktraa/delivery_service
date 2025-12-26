@@ -1,7 +1,7 @@
 
 <template>
   <!-- main container -->
-  <div class="max-w-[80rem] h-full m-auto page">
+  <div class="max-w-[80rem] h-full m-auto page relative">
     
     <!-- HEADER -->
     <div class="flex justify-between items-center mb-[2rem]">
@@ -87,7 +87,18 @@
 
       </div>
     </div>
-
+    <transition name="fade">
+      <div
+         v-if="showMessage"
+        class="absolute top-25 left-9/12 -translate-x-1/2 w-[16rem] py-3 px-4 text-center rounded-lg z-2"
+        :class="
+          deliveryStore.error ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+        "
+      >
+        <p v-if="deliveryStore.error">{{ deliveryStore.error }}</p>
+        <p v-else>{{ deliveryStore.success }}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -101,6 +112,7 @@ const route = useRoute()
 const router = useRouter()
 const deliveryStore = useCreateDeliveryStore()
 const order = ref({})
+const showMessage = ref(false)
 
 // 1. Define the key from your .env file
 const myApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
@@ -202,8 +214,11 @@ const handleMainAction = async () => {
       if (result.success) {
         order.value = result.delivery
         currentStep.value = 1
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       } else {
-        alert(result.message)
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       }
     } else if (currentStep.value === 1 || currentStep.value === 2) {
       // Update delivery status
@@ -211,8 +226,11 @@ const handleMainAction = async () => {
       if (result.success) {
         order.value = result.delivery
         currentStep.value += 1
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       } else {
-        alert(result.message)
+        showMessage.value = true;
+        setTimeout(() => (showMessage.value = false), 2600);
       }
     } else if (currentStep.value === 3) {
       router.push('/driver/accDelivery')
