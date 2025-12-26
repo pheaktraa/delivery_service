@@ -1,7 +1,7 @@
 <template>
   <!-- CONTAINER -->
   <div class="max-w-full h-full">
-    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd">
+    <div class="bg-(--gray-100) p-[2rem] rounded-lg sd h-screen">
       <!-- PAGE HEADER -->
       <div class="">
         <p class="text-[2rem] font-bold text-(--gray-800)">Dashboard</p>

@@ -1,6 +1,7 @@
 <template>
-  <div class="max-w-[80rem] h-full m-auto page">
-    <div class="p-[2rem] bg-(--gray-100) mt-[2rem] rounded-lg sd">
+  <div class="max-w-[80rem] h-screen m-auto flex items-center justify-center">
+    <div>
+      <div class="p-[2rem] bg-(--gray-100) rounded-lg sd">
       <div class="flex justify-between">
         <p class="text-[length:var(--text-title)] font-extrabold">Order Management Details</p>
         <button @click="router.back()" 
@@ -81,6 +82,8 @@
         </div>
       </div>
     </div>
+    </div>
+    
   </div>
 </template>
 
