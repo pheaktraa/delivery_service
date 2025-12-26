@@ -16,8 +16,7 @@
             <!-- relative group -->
             <div class="relative">
                 <!-- The Image -->
-                <img :src="adminData.avatar"
-                    class="w-32 h-32 rounded-full object-cover border-4 border-(--gray-500)">
+                <img src="../../assets/img/imgprofile.avif" alt="" class="w-40 rounded rounded-full">
 
                 <!-- The Camera Icon (Only visible in Edit Mode) -->
                 <button v-if="isEditing" @click="triggerFileInput"
@@ -31,7 +30,6 @@
             <div class="text-center md:text-left mt-2">
                 <h2 class="text-[1.5rem] font-bold text-(--gray-800)">{{ adminData.firstname }} {{ adminData.lastname }}</h2>
                 <p class="text-(--gray-800) font-medium">{{ adminData.role }}</p>
-                <p class="text-(--gray-800) font-medium mt-[1rem]">Admin Personal Information (TOP SECRET)</p>
             </div>
         </div>
 

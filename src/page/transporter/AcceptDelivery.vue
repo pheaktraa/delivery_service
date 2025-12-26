@@ -3,7 +3,7 @@
   <div class="p-8 max-w-7xl mx-auto bg-(--gray-100) h-screen">
     <!-- Header -->
     <div class="mb-[2rem]">
-      <h1 class="text-3xl font-bold text-(--red-800)">Available Orders</h1>
+      <h1 class="text-3xl font-bold text-(--gray-800)">Available Orders</h1>
     </div>
 
     <!-- LOADING / EMPTY STATE SAFETY -->

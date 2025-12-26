@@ -1,10 +1,10 @@
 <template>
     <!-- CONTAINER -->
-    <div class="p-8 max-w-7xl mx-auto bg-(--gray-100)">
+    <div class="p-8 max-w-7xl mx-auto h-screen bg-(--gray-100)">
         <div class="">
             <!-- PAGE HEADER -->
             <div class="mb-[1rem]">
-                <p class="text-(--red-800) text-[2rem] font-bold">Dashboard</p>
+                <p class="text-(--gray-800) text-[2rem] font-bold">Dashboard</p>
                 <p class="text-xl font-bold text-(--gray-800)">welcome back driver</p>
             </div>
 
