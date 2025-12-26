@@ -5,10 +5,10 @@
       <div class="flex justify-between p-4 border-b">
         <div class="flex items-center gap-2">
           <p class="font-semibold text-lg">Chat</p>
-          <span class="network-status text-xs px-2 py-1 rounded"
+          <!-- <span class="network-status text-xs px-2 py-1 rounded"
             :class="isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
             {{ isOnline ? 'Online' : 'Offline' }}
-          </span>
+          </span> -->
         </div>
         <div class="flex items-center gap-2">
           <button 
@@ -112,7 +112,7 @@
       </div>
       
       <!-- Storage info -->
-      <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
+      <!-- <div class="p-3 border-t text-xs text-gray-400 bg-gray-50">
         <div class="flex justify-between items-center">
           <span>Auto-saved</span>
           <span>{{ formatLastSync() }}</span>
@@ -128,7 +128,7 @@
             {{ storageUsage.used }}/{{ storageUsage.total }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Chat Area -->
@@ -145,14 +145,14 @@
             <div>
               <p class="font-semibold text-lg">{{ transporterName }}</p>
               <p class="text-sm text-gray-500 flex items-center">
-                <span :class="[
+                <!-- <span :class="[
                   'w-2 h-2 rounded-full mr-2',
                   isOnline ? 'bg-green-500' : 'bg-gray-400'
                 ]"></span>
                 {{ isOnline ? 'Online' : 'Offline' }} • {{ messages.length }} messages
                 <span v-if="failedMessagesCount > 0" class="ml-2 text-red-500 text-xs">
                   ({{ failedMessagesCount }} failed)
-                </span>
+                </span> -->
               </p>
             </div>
           </div>
@@ -209,7 +209,7 @@
       <!-- Messages -->
       <div v-if="activeConversation" ref="messageBox" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
         <!-- Connection status banner -->
-        <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <!-- <div v-if="!isOnline" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,7 +225,7 @@
               Retry all
             </button>
           </div>
-        </div>
+        </div> -->
 
         <div v-if="messages.length === 0" class="flex items-center justify-center h-full">
           <div class="text-center">
