@@ -1,6 +1,6 @@
 <template>
   <!-- SIDEBAR CONTAINER -->
-  <nav class="fixed left-0 top-0 h-full w-[250px] bg-(--red-900) z-50 p-[.5rem]">
+  <nav class="fixed left-0 top-0 h-full w-[250px] bg-(--red-900) z-50 p-[.5rem]" v-if="!['/chattransporter'].includes(route.path)">
     
     <!-- BRAND LOGO -->
     <div class="h-[6rem] p-6 border-b-2 border-white  flex items-center justify-center">
@@ -48,8 +48,30 @@
         </span> Logout
       </button>
     </div>
-
   </nav>
+  <router-link to="/chattransporter" v-if="!['/chattransporter'].includes(route.path)">
+      <div class="max-w-[80rem] m-auto ml-">
+        <div
+          class="max-w-[80rem] m-auto h-[20rem] w-full fixed top-10/12 left-[95%]"
+        >
+          <div
+            class="p-1 bg-(--red-800) w-[3rem] flex items-center justify-center h-[3rem] rounded-full relative"
+          >
+            <img
+              src="../assets/icon/chaticon.svg"
+              alt=""
+              class="w-[1.5rem] z-1"
+            />
+            <div
+              class="w-[2rem] h-[2rem] bg-(--red-800) rounded-full absolute z-2 flex items-center justify-center left-[2rem] top-[-1rem]"
+              v-if="show > 1"
+            >
+              <p class="text-white">1</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </router-link>
 </template>
 
 <script setup>
