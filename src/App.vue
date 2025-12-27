@@ -9,7 +9,7 @@
   <div class="min-h-screen flex flex-col">
 
     <!-- snow -->
-    <SnowfallEffect />
+    <!-- <SnowfallEffect /> -->
 
     <!-- TOP NAVBAR -->
     <!-- Only shows on public pages (Home, About), hides on Admin/Driver pages -->
