@@ -412,7 +412,7 @@ const handleMainAction = async () => {
         movingMarker.setVisible(true);
         // Change 20 to 30 for a slow, 30-second trip
         // Change 20 to 5 for a very fast, 5-second trip
-        animateMarkerAlongPath(movingMarker, roadPath, 40);
+        animateMarkerAlongPath(movingMarker, roadPath, 30);
       }
     } else if (currentStep.value === 2) {
       // Logic: Confirm Delivery -> Status 3 (STOP & SKIP)
