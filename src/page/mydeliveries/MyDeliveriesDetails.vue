@@ -261,7 +261,7 @@ const startTrackingAnimation = () => {
   if (movingMarker && roadPath.length > 0) {
     movingMarker.setVisible(true);
     // Make the car finish the trip in 20 seconds for the class demo
-    animateMarkerAlongPath(movingMarker, roadPath, 30);
+    animateMarkerAlongPath(movingMarker, roadPath, 40);
   }
 };
 
